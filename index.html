@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>InkMatch — Find Tattoo Artists by City & Style</title>
+  <meta name="description" content="Search tattoo artists near you by city, style, and gender. Bios, portfolios, socials, and shop info in one place.">
+  <meta name="keywords" content="tattoo artists, tattoo directory, tattoo styles, Chattanooga tattoo, find tattoo artist">
+
+  <meta property="og:title" content="InkMatch — Find Tattoo Artists by City & Style">
+  <meta property="og:description" content="Search tattoo artists near you by city, style, and gender.">
+  <meta property="og:url" content="https://inkmatch.example.com">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/src/main.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="flex h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans"
+      x-data="inkmatch()"
+      x-init="load()">
+
+  <!-- Header -->
+  <header class="border-b border-ink-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center justify-between py-5" x-data="{ mobileMenuOpen: false }">
+        <a href="/" class="flex items-center gap-2" aria-label="InkMatch home">
+          <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
+          <span class="font-display text-3xl tracking-widest">INKMATCH</span>
+        </a>
+        <div class="hidden md:flex items-center gap-x-8 text-sm uppercase tracking-widest text-ink-200">
+          <a href="#browse" class="hover:text-white">Browse</a>
+          <a href="#for-artists" class="hover:text-white">For Artists</a>
+          <a href="#about" class="hover:text-white">About</a>
+          <button x-show="saved.length > 0" @click="showSavedOnly = !showSavedOnly"
+                  class="flex items-center gap-1.5 text-blood hover:text-white transition"
+                  :class="showSavedOnly ? 'text-white' : ''">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
+            </svg>
+            <span>Saved (<span x-text="saved.length"></span>)</span>
+          </button>
+        </div>
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-ink-200" aria-label="Menu">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-cloak
+             class="absolute inset-x-0 top-16 z-40 mx-4 rounded-lg border border-ink-800 bg-ink-900 p-4 md:hidden">
+          <a href="#browse" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">Browse</a>
+          <a href="#for-artists" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">For Artists</a>
+          <a href="#about" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">About</a>
+          <button x-show="saved.length > 0" @click="showSavedOnly = !showSavedOnly; mobileMenuOpen = false"
+                  class="block py-2 text-blood">Saved (<span x-text="saved.length"></span>)</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-auto">
+
+    <!-- LANDING: City prompt (shown until user enters a city) -->
+    <section x-show="!filters.city" x-cloak
+             class="relative overflow-hidden min-h-[85vh] flex items-center py-24 sm:py-32">
+
+      <!-- Video background -->
+      <video autoplay muted loop playsinline
+             class="absolute inset-0 h-full w-full object-cover"
+             aria-hidden="true">
+        <source src="/videos/hero.mp4" type="video/mp4">
+      </video>
+
+      <!-- Dark gradient overlay for text legibility -->
+      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/85 via-ink-950/75 to-ink-950" aria-hidden="true"></div>
+
+      <div class="relative w-full container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-blood">Find your artist</p>
+        <h1 class="mt-4 font-display text-6xl sm:text-8xl tracking-tight text-white leading-none">
+          Where are<br/>you inking?
+        </h1>
+        <p class="mt-6 max-w-xl mx-auto text-lg text-ink-200">
+          Tell us your city and we'll show you the artists working nearby.
+        </p>
+
+        <form @submit.prevent="submitCity()"
+              class="mt-12 mx-auto max-w-xl">
+          <div class="flex flex-col sm:flex-row gap-3 rounded-xl border border-ink-800 bg-ink-900 p-3 shadow-2xl">
+            <input type="text"
+                   x-model="cityInput"
+                   x-ref="cityInput"
+                   placeholder="e.g. Chattanooga"
+                   autocomplete="address-level2"
+                   class="flex-1 rounded-md bg-ink-800 border border-ink-700 px-4 py-3 text-lg text-white placeholder-ink-500 focus:outline-none focus:border-blood">
+            <button type="submit"
+                    class="rounded-md bg-blood hover:bg-blood-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-white">
+              Find Artists
+            </button>
+          </div>
+          <p class="mt-4 text-sm text-ink-500">
+            Starting in Chattanooga — try it and see.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ARTIST SPOTLIGHT (landing view only) -->
+    <section x-show="!filters.city && featured.length > 0" x-cloak
+             class="relative py-20 sm:py-28 border-t border-ink-800 overflow-hidden"
+             style="background: radial-gradient(ellipse at top, #141414 0%, #0a0a0a 70%);">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div class="flex items-end justify-between flex-wrap gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-blood">Artist Spotlight</p>
+            <h2 class="mt-3 font-display text-4xl sm:text-6xl tracking-tight text-white">Recent Work</h2>
+          </div>
+          <p class="text-sm text-ink-500 max-w-xs">
+            A rotating look at what artists across the network are inking right now. Tap any piece to meet the artist.
+          </p>
+        </div>
+      </div>
+
+      <!-- Conveyor belt -->
+      <div class="marquee-mask">
+        <div class="marquee-track flex gap-4 sm:gap-6 w-max">
+          <template x-for="(artist, i) in [...featured, ...featured]" :key="artist.id + '-' + i">
+            <button @click="openArtist(artist)"
+                    class="group relative shrink-0 w-56 sm:w-64 aspect-[3/4] overflow-hidden rounded-lg bg-ink-800 border border-ink-800 hover:border-blood transition duration-300">
+              <img :src="artist.photos[0]" :alt="'Recent work by ' + artist.name"
+                   class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent"></div>
+              <div class="absolute inset-x-0 bottom-0 p-4 text-left">
+                <p class="font-display text-xl tracking-wide text-white leading-tight" x-text="artist.name"></p>
+                <p class="mt-1 text-xs uppercase tracking-widest text-ink-200" x-text="artist.styles[0] + ' · ' + artist.city"></p>
+              </div>
+            </button>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS: shown once user picks a city -->
+    <section x-show="filters.city" x-cloak
+             class="relative py-16 sm:py-20"
+             style="background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 65%);">
+      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- City header + style/gender filters -->
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-blood">Artists near</p>
+            <h1 class="mt-2 font-display text-5xl sm:text-6xl tracking-tight text-white" x-text="filters.city"></h1>
+            <button @click="changeCity()"
+                    class="mt-2 text-xs uppercase tracking-widest text-ink-500 hover:text-white">
+              ← Change city
+            </button>
+          </div>
+          <div class="flex flex-wrap items-end gap-3">
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1">Artist</span>
+              <select x-model="filters.gender"
+                      class="rounded-md border border-ink-700 bg-ink-900 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+                <option value="">Any</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </label>
+            <button @click="filters.styles=[]; filters.gender=''; showSavedOnly=false"
+                    x-show="filters.styles.length || filters.gender || showSavedOnly"
+                    class="pb-2.5 text-xs uppercase tracking-widest text-ink-200 hover:text-white">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Style pill filters -->
+        <div class="mb-6">
+          <p class="text-xs uppercase tracking-widest text-ink-500 mb-3">
+            Styles <span x-show="filters.styles.length" class="text-blood normal-case tracking-normal">(<span x-text="filters.styles.length"></span> selected)</span>
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <template x-for="style in allStyles" :key="style">
+              <button @click="toggleStyle(style)"
+                      :class="filters.styles.includes(style) ? 'bg-blood border-blood text-white' : 'border-ink-700 text-ink-200 hover:border-ink-500 hover:text-white'"
+                      class="text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition"
+                      x-text="style"></button>
+            </template>
+          </div>
+        </div>
+
+        <!-- Only-saved toggle chip -->
+        <div class="flex items-center justify-between mb-6">
+          <p class="text-sm text-ink-500">
+            <span x-text="filtered.length"></span> artist<span x-show="filtered.length !== 1">s</span> found
+          </p>
+          <button x-show="saved.length > 0"
+                  @click="showSavedOnly = !showSavedOnly"
+                  :class="showSavedOnly ? 'bg-blood border-blood text-white' : 'border-ink-700 text-ink-200 hover:text-white'"
+                  class="flex items-center gap-2 text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
+            </svg>
+            Saved only
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <template x-if="loading">
+          <p class="text-center text-ink-500 py-16">Loading artists…</p>
+        </template>
+
+        <!-- Empty state (no artists in this city yet) -->
+        <template x-if="!loading && cityHasNoArtists">
+          <div class="mx-auto max-w-xl rounded-xl border border-ink-800 bg-ink-900 p-10 text-center">
+            <p class="font-display text-3xl tracking-widest text-white">Not here yet</p>
+            <p class="mt-3 text-ink-200">
+              We don't have artists in <span class="text-white" x-text="filters.city"></span> yet.
+              We're adding new cities every week — want us to reach out when we do?
+            </p>
+            <a :href="'mailto:hello@inkmatch.example.com?subject=Notify%20me%20when%20InkMatch%20launches%20in%20' + encodeURIComponent(filters.city)"
+               class="mt-6 inline-block rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-white">
+              Notify me
+            </a>
+            <p class="mt-6 text-xs text-ink-500">
+              Or <button @click="changeCity()" class="underline hover:text-white">try another city</button>.
+            </p>
+          </div>
+        </template>
+
+        <!-- Empty state (city has artists but filters exclude them) -->
+        <template x-if="!loading && !cityHasNoArtists && filtered.length === 0">
+          <div class="mx-auto max-w-lg rounded-xl border border-ink-800 bg-ink-900 p-10 text-center">
+            <p class="font-display text-3xl tracking-widest text-white">No matches</p>
+            <p class="mt-3 text-ink-200">Try loosening the style or artist filter.</p>
+          </div>
+        </template>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <template x-for="artist in filtered" :key="artist.id">
+            <div class="group relative rounded-xl overflow-hidden border border-ink-800 bg-ink-900 hover:border-blood hover:shadow-2xl hover:shadow-blood/20 transition duration-300">
+              <!-- Heart save button (absolute over image) -->
+              <button @click.stop="toggleSaved(artist.id)"
+                      :aria-label="isSaved(artist.id) ? 'Unsave' : 'Save'"
+                      class="absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-ink-950/70 backdrop-blur-sm hover:bg-blood flex items-center justify-center transition">
+                <svg class="h-4 w-4 transition" :class="isSaved(artist.id) ? 'fill-blood text-blood' : 'fill-none text-white'"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
+                </svg>
+              </button>
+              <button @click="openArtist(artist)" class="text-left w-full">
+                <div class="relative aspect-square overflow-hidden bg-ink-800">
+                  <img :src="artist.photos[0]" :alt="artist.name + ' portfolio work'"
+                       class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                  <div class="absolute inset-0 bg-gradient-to-t from-ink-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                  <!-- Availability badge on image -->
+                  <span x-show="artist.availability"
+                        :class="availabilityClass(artist.availability)"
+                        class="absolute top-3 left-3 text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border backdrop-blur-sm"
+                        x-text="artist.availability"></span>
+                </div>
+                <div class="p-5">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <h3 class="font-display text-2xl tracking-wide text-white" x-text="artist.name"></h3>
+                    <span class="text-xs uppercase tracking-widest text-ink-500" x-text="artist.city"></span>
+                  </div>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <template x-for="style in artist.styles" :key="style">
+                      <span class="style-pill" x-text="style"></span>
+                    </template>
+                  </div>
+                  <p class="mt-4 text-sm text-ink-200 line-clamp-2" x-text="artist.bio"></p>
+                  <div class="mt-4 flex items-center justify-between">
+                    <p x-show="artist.pricing" class="text-xs text-ink-500" x-text="artist.pricing"></p>
+                    <p class="text-xs uppercase tracking-widest text-blood group-hover:text-white">View Profile →</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- Artist Modal -->
+    <div x-show="selected" x-cloak
+         @keydown.escape.window="closeArtist()"
+         class="fixed inset-0 z-50 overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100">
+      <div class="fixed inset-0 bg-black/80" @click="closeArtist()"></div>
+      <div class="relative min-h-full flex items-start justify-center p-4 sm:p-8">
+        <div class="relative w-full max-w-3xl rounded-xl border border-ink-800 bg-ink-900 overflow-hidden"
+             @click.stop>
+          <template x-if="selected">
+            <div>
+              <!-- Close + Save -->
+              <div class="absolute top-4 right-4 z-10 flex gap-2">
+                <button @click="toggleSaved(selected.id)"
+                        :aria-label="isSaved(selected.id) ? 'Unsave' : 'Save'"
+                        class="h-9 w-9 rounded-full bg-ink-800 hover:bg-blood flex items-center justify-center transition">
+                  <svg class="h-4 w-4 transition" :class="isSaved(selected.id) ? 'fill-blood text-blood' : 'fill-none text-white'"
+                       viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
+                  </svg>
+                </button>
+                <button @click="closeArtist()"
+                        class="h-9 w-9 rounded-full bg-ink-800 hover:bg-blood flex items-center justify-center"
+                        aria-label="Close">
+                  <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Header -->
+              <div class="p-6 sm:p-8 border-b border-ink-800">
+                <div class="flex items-center gap-4">
+                  <img :src="selected.avatar" :alt="selected.name"
+                       class="h-16 w-16 rounded-full object-cover border border-ink-700">
+                  <div>
+                    <h2 class="font-display text-4xl tracking-wide text-white" x-text="selected.name"></h2>
+                    <p class="text-sm text-ink-200">
+                      <span x-text="selected.city"></span>, <span x-text="selected.state"></span>
+                    </p>
+                  </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <template x-for="style in selected.styles" :key="style">
+                    <span class="style-pill" x-text="style"></span>
+                  </template>
+                </div>
+
+                <!-- Availability + Pricing -->
+                <div class="mt-5 grid grid-cols-2 gap-4">
+                  <div x-show="selected.availability">
+                    <p class="text-[10px] uppercase tracking-widest text-ink-500">Booking</p>
+                    <span :class="availabilityClass(selected.availability)"
+                          class="mt-1 inline-block text-xs uppercase tracking-widest px-2 py-1 rounded-full border"
+                          x-text="selected.availability"></span>
+                  </div>
+                  <div x-show="selected.pricing">
+                    <p class="text-[10px] uppercase tracking-widest text-ink-500">Rate</p>
+                    <p class="mt-1 text-sm text-white" x-text="selected.pricing"></p>
+                  </div>
+                </div>
+
+                <p class="mt-5 text-ink-100 leading-relaxed" x-text="selected.bio"></p>
+              </div>
+
+              <!-- Photo gallery -->
+              <div class="p-6 sm:p-8 border-b border-ink-800">
+                <p class="text-xs uppercase tracking-widest text-ink-500 mb-4">Portfolio</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <template x-for="(photo, i) in selected.photos" :key="i">
+                    <div class="aspect-square overflow-hidden rounded-md bg-ink-800">
+                      <img :src="photo" :alt="selected.name + ' work ' + (i+1)"
+                           class="h-full w-full object-cover">
+                    </div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Shop + Socials -->
+              <div class="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-ink-800">
+                <div>
+                  <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Shop</p>
+                  <p class="text-white font-semibold" x-text="selected.shop.name"></p>
+                  <p class="text-sm text-ink-200 mt-1" x-text="selected.shop.address"></p>
+                  <a :href="selected.shop.url" target="_blank" rel="noopener"
+                     class="mt-3 inline-block text-sm text-blood hover:text-white">Visit shop →</a>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Follow</p>
+                  <template x-if="selected.socials.instagram">
+                    <a :href="selected.socials.instagram" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 text-white hover:text-blood">
+                      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.055 1.804.249 2.227.415.56.217.96.477 1.38.896.42.42.679.82.896 1.38.166.423.36 1.057.415 2.227.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.055 1.17-.249 1.804-.415 2.227a3.72 3.72 0 01-.896 1.38 3.72 3.72 0 01-1.38.896c-.423.166-1.057.36-2.227.415-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.055-1.804-.249-2.227-.415a3.72 3.72 0 01-1.38-.896 3.72 3.72 0 01-.896-1.38c-.166-.423-.36-1.057-.415-2.227C2.212 15.584 2.2 15.2 2.2 12s.012-3.584.07-4.85c.055-1.17.249-1.804.415-2.227.217-.56.477-.96.896-1.38.42-.42.82-.679 1.38-.896.423-.166 1.057-.36 2.227-.415C8.416 2.212 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.51.012-4.74.068-1.02.047-1.575.217-1.944.362-.489.19-.838.417-1.204.783a3.24 3.24 0 00-.783 1.204c-.145.369-.315.924-.362 1.944C3.912 8.49 3.9 8.85 3.9 12s.012 3.51.068 4.74c.047 1.02.217 1.575.362 1.944.19.489.417.838.783 1.204.366.366.715.593 1.204.783.369.145.924.315 1.944.362 1.23.056 1.59.068 4.74.068s3.51-.012 4.74-.068c1.02-.047 1.575-.217 1.944-.362.489-.19.838-.417 1.204-.783.366-.366.593-.715.783-1.204.145-.369.315-.924.362-1.944.056-1.23.068-1.59.068-4.74s-.012-3.51-.068-4.74c-.047-1.02-.217-1.575-.362-1.944a3.24 3.24 0 00-.783-1.204 3.24 3.24 0 00-1.204-.783c-.369-.145-.924-.315-1.944-.362C15.51 4.012 15.15 4 12 4zm0 3.05a4.95 4.95 0 110 9.9 4.95 4.95 0 010-9.9zm0 1.8a3.15 3.15 0 100 6.3 3.15 3.15 0 000-6.3zm5.2-1.98a1.16 1.16 0 110 2.32 1.16 1.16 0 010-2.32z"/>
+                      </svg>
+                      <span>Instagram</span>
+                    </a>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Similar artists -->
+              <div x-show="similarTo(selected).length > 0" class="p-6 sm:p-8">
+                <p class="text-xs uppercase tracking-widest text-ink-500 mb-4">Similar Artists in <span x-text="selected.city"></span></p>
+                <div class="grid grid-cols-3 gap-3">
+                  <template x-for="a in similarTo(selected)" :key="a.id">
+                    <button @click="openArtist(a)"
+                            class="group text-left rounded-md overflow-hidden border border-ink-800 hover:border-blood transition">
+                      <div class="aspect-square overflow-hidden bg-ink-800">
+                        <img :src="a.photos[0]" :alt="a.name"
+                             class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                      </div>
+                      <div class="p-2">
+                        <p class="font-display text-sm sm:text-base tracking-wide text-white truncate" x-text="a.name"></p>
+                        <p class="text-[10px] uppercase tracking-widest text-ink-500 truncate" x-text="a.styles[0]"></p>
+                      </div>
+                    </button>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- For Artists CTA + Submission form -->
+    <section id="for-artists"
+             class="relative overflow-hidden border-t border-ink-800 py-28 sm:py-36 bg-cover bg-center"
+             style="background-image: url('/images/tattooing-bw.jpg');">
+      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/90 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
+      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-xs uppercase tracking-[0.3em] text-blood">For Artists</p>
+          <h2 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white">
+            Get on the map.
+          </h2>
+          <p class="mt-6 text-lg text-ink-200">
+            Free listing while we grow. Fill out the basics and we'll build your profile within 48 hours.
+          </p>
+        </div>
+
+        <form action="https://formsubmit.co/romerochristopher240@gmail.com"
+              method="POST"
+              x-data="{ submitting: false, submitted: false }"
+              @submit="submitting = true"
+              class="mt-12 mx-auto max-w-2xl rounded-xl border border-ink-800 bg-ink-900/90 backdrop-blur-sm p-6 sm:p-8">
+          <!-- FormSubmit config -->
+          <input type="hidden" name="_subject" value="New InkMatch artist submission">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" style="display:none">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Name</span>
+              <input type="text" name="name" required
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Email</span>
+              <input type="email" name="email" required
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">City</span>
+              <input type="text" name="city" required placeholder="e.g. Chattanooga, TN"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Instagram</span>
+              <input type="text" name="instagram" required placeholder="@yourhandle"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Shop (optional)</span>
+              <input type="text" name="shop" placeholder="Where do you work?"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Styles</span>
+              <input type="text" name="styles" required placeholder="e.g. Fine Line, Blackwork"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Anything else?</span>
+              <textarea name="notes" rows="3" placeholder="Availability, rates, links to portfolio…"
+                        class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood"></textarea>
+            </label>
+          </div>
+
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-ink-500">We'll reach out on Instagram or email to grab your photos.</p>
+            <button type="submit" :disabled="submitting"
+                    class="rounded-full bg-blood hover:bg-blood-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-white transition disabled:opacity-60">
+              <span x-show="!submitting">Submit</span>
+              <span x-show="submitting" x-cloak>Sending…</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about"
+             class="relative overflow-hidden border-t border-ink-800 py-28 sm:py-36 bg-cover bg-center"
+             style="background-image: url('/images/tattoo-neon.jpg');">
+      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/95 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
+      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+        <p class="text-xs uppercase tracking-[0.3em] text-blood text-center">About</p>
+        <h2 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white text-center">Why InkMatch</h2>
+        <p class="mt-8 text-lg text-ink-200 text-center leading-relaxed">
+          Finding the right artist shouldn't mean hours scrolling Instagram. InkMatch groups tattoo
+          artists by city and style so you can compare portfolios side by side — then reach out
+          directly. Starting in Chattanooga, expanding city by city.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-ink-800 py-10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
+        <span class="font-display text-xl tracking-widest text-white">INKMATCH</span>
+      </div>
+      <p class="text-sm text-ink-500">
+        &copy; <span x-data x-text="new Date().getFullYear()"></span> InkMatch. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Alpine state -->
+  <script>
+    function inkmatch() {
+      return {
+        loading: true,
+        artists: [],
+        selected: null,
+        cityInput: '',
+        saved: [],
+        showSavedOnly: false,
+        filters: { city: '', styles: [], gender: '' },
+        allStyles: [
+          'Biomechanical', 'Blackwork', 'Chicano', 'Cybersigilism', 'Dotwork',
+          'Fine Line', 'Geometric', 'Illustrative', 'Japanese', 'Micro',
+          'Neo-Traditional', 'New School', 'Patchwork', 'Realism',
+          'Script/Lettering', 'Traditional', 'Trash Polka', 'Tribal', 'Watercolor'
+        ],
+        get filtered() {
+          if (!this.filters.city) return [];
+          const cityLc = this.filters.city.toLowerCase();
+          return this.artists.filter(a => {
+            const aCity = a.city.toLowerCase();
+            if (aCity !== cityLc && !aCity.includes(cityLc) && !cityLc.includes(aCity)) return false;
+            if (this.filters.styles.length && !this.filters.styles.some(s => a.styles.includes(s))) return false;
+            if (this.filters.gender && a.gender !== this.filters.gender) return false;
+            if (this.showSavedOnly && !this.saved.includes(a.id)) return false;
+            return true;
+          });
+        },
+        get featured() {
+          return this.artists.filter(a => a.featured);
+        },
+        get cityHasNoArtists() {
+          if (!this.filters.city) return false;
+          const cityLc = this.filters.city.toLowerCase();
+          return !this.artists.some(a => {
+            const aCity = a.city.toLowerCase();
+            return aCity === cityLc || aCity.includes(cityLc) || cityLc.includes(aCity);
+          });
+        },
+        similarTo(artist) {
+          if (!artist) return [];
+          return this.artists
+            .filter(a => a.id !== artist.id && a.city === artist.city && a.styles.some(s => artist.styles.includes(s)))
+            .slice(0, 3);
+        },
+        toggleStyle(style) {
+          const idx = this.filters.styles.indexOf(style);
+          if (idx === -1) this.filters.styles.push(style);
+          else this.filters.styles.splice(idx, 1);
+        },
+        isSaved(id) {
+          return this.saved.includes(id);
+        },
+        toggleSaved(id) {
+          const idx = this.saved.indexOf(id);
+          if (idx === -1) this.saved.push(id);
+          else this.saved.splice(idx, 1);
+          localStorage.setItem('inkmatch:saved', JSON.stringify(this.saved));
+        },
+        availabilityClass(status) {
+          if (!status) return 'bg-ink-800 text-ink-200';
+          const s = status.toLowerCase();
+          if (s.includes('open')) return 'bg-emerald-900/50 text-emerald-300 border-emerald-800';
+          if (s.includes('waitlist') || s.includes('consult')) return 'bg-amber-900/40 text-amber-300 border-amber-800';
+          return 'bg-ink-800 text-ink-200 border-ink-700';
+        },
+        async load() {
+          try {
+            const res = await fetch('/artists.json');
+            this.artists = await res.json();
+          } catch (e) {
+            console.error('Failed to load artists', e);
+          } finally {
+            this.loading = false;
+          }
+          const savedCity = localStorage.getItem('inkmatch:city');
+          if (savedCity) {
+            this.filters.city = savedCity;
+            this.cityInput = savedCity;
+          }
+          try {
+            const savedFavs = localStorage.getItem('inkmatch:saved');
+            if (savedFavs) this.saved = JSON.parse(savedFavs);
+          } catch (e) {
+            this.saved = [];
+          }
+        },
+        submitCity() {
+          const val = this.cityInput.trim();
+          if (!val) return;
+          const clean = val.replace(/,\s*[A-Za-z]{2}$/, '').trim();
+          const display = clean.replace(/\b\w/g, c => c.toUpperCase());
+          this.filters.city = display;
+          localStorage.setItem('inkmatch:city', display);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        changeCity() {
+          this.filters = { city: '', styles: [], gender: '' };
+          this.showSavedOnly = false;
+          this.cityInput = '';
+          localStorage.removeItem('inkmatch:city');
+          this.$nextTick(() => this.$refs.cityInput?.focus());
+        },
+        openArtist(a) {
+          this.selected = a;
+          document.body.style.overflow = 'hidden';
+        },
+        closeArtist() {
+          this.selected = null;
+          document.body.style.overflow = '';
+        }
+      };
+    }
+  </script>
+
+  <style>[x-cloak] { display: none !important; }</style>
+</body>
+</html>

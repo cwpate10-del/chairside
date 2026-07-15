@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-950: #0a0a0a;
+  --color-ink-900: #141414;
+  --color-ink-800: #1f1f1f;
+  --color-ink-700: #2a2a2a;
+  --color-ink-500: #6b6b6b;
+  --color-ink-200: #d4d4d4;
+  --color-ink-100: #f4f4f4;
+  --color-blood: #c0392b;
+  --color-blood-dark: #8b1e14;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Bebas Neue", "Impact", sans-serif;
+}
+
+html, body {
+  background-color: var(--color-ink-950);
+  color: var(--color-ink-100);
+}
+
+/* Custom scrollbar (dark theme) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-ink-900); }
+::-webkit-scrollbar-thumb { background: var(--color-ink-700); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-500); }
+
+/* Style tag pill */
+.style-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-ink-700);
+  color: var(--color-ink-200);
+  border-radius: 999px;
+}
+
+/* Spotlight conveyor-belt marquee */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 50s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
