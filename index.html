@@ -5,13 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Chairside — Find Tattoo Artists by City & Style</title>
-  <meta name="description" content="Search tattoo artists near you by city, style, and gender. Bios, portfolios, socials, and shop info in one place.">
-  <meta name="keywords" content="tattoo artists, tattoo directory, tattoo styles, Chattanooga tattoo, find tattoo artist">
+  <meta name="description" content="Chairside is a directory of tattoo artists — search by city, style, and gender to see portfolios, availability, pricing, and shop info in one place.">
+  <meta name="keywords" content="tattoo artists, tattoo directory, tattoo styles, Chattanooga tattoo, find tattoo artist, tattoo near me">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="canonical" href="https://chairside.ink">
 
+  <!-- Open Graph -->
   <meta property="og:title" content="Chairside — Find Tattoo Artists by City & Style">
-  <meta property="og:description" content="Search tattoo artists near you by city, style, and gender.">
+  <meta property="og:description" content="A directory of tattoo artists. Search by city and style. See portfolios, availability, and shop info side by side.">
   <meta property="og:url" content="https://chairside.ink">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chairside">
+  <meta property="og:image" content="https://chairside.ink/images/tattooing-bw.jpg">
+  <meta property="og:image:width" content="2000">
+  <meta property="og:image:height" content="1333">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chairside — Find Tattoo Artists by City & Style">
+  <meta name="twitter:description" content="A directory of tattoo artists. Search by city and style.">
+  <meta name="twitter:image" content="https://chairside.ink/images/tattooing-bw.jpg">
 
   <link rel="icon" href="/favicon.ico">
 
@@ -22,7 +35,39 @@
 
   <link rel="stylesheet" href="/src/main.css">
 
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://chairside.ink/#website",
+        "url": "https://chairside.ink",
+        "name": "Chairside",
+        "description": "Directory of tattoo artists searchable by city and style.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://chairside.ink/?city={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://chairside.ink/#organization",
+        "name": "Chairside",
+        "url": "https://chairside.ink",
+        "logo": "https://chairside.ink/images/tattooing-bw.jpg"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body class="flex h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans"
       x-data="chairside()"
