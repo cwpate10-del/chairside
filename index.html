@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>InkMatch — Find Tattoo Artists by City & Style</title>
+  <title>Chairside — Find Tattoo Artists by City & Style</title>
   <meta name="description" content="Search tattoo artists near you by city, style, and gender. Bios, portfolios, socials, and shop info in one place.">
   <meta name="keywords" content="tattoo artists, tattoo directory, tattoo styles, Chattanooga tattoo, find tattoo artist">
 
-  <meta property="og:title" content="InkMatch — Find Tattoo Artists by City & Style">
+  <meta property="og:title" content="Chairside — Find Tattoo Artists by City & Style">
   <meta property="og:description" content="Search tattoo artists near you by city, style, and gender.">
-  <meta property="og:url" content="https://inkmatch.example.com">
+  <meta property="og:url" content="https://chairside.ink">
   <meta property="og:type" content="website">
 
   <link rel="icon" href="/favicon.ico">
@@ -25,16 +25,16 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="flex h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans"
-      x-data="inkmatch()"
+      x-data="chairside()"
       x-init="load()">
 
   <!-- Header -->
   <header class="border-b border-ink-800">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <nav class="flex items-center justify-between py-5" x-data="{ mobileMenuOpen: false }">
-        <a href="/" class="flex items-center gap-2" aria-label="InkMatch home">
+        <a href="/" class="flex items-center gap-2" aria-label="Chairside home">
           <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
-          <span class="font-display text-3xl tracking-widest">INKMATCH</span>
+          <span class="font-display text-3xl tracking-widest">CHAIRSIDE</span>
         </a>
         <div class="hidden md:flex items-center gap-x-8 text-sm uppercase tracking-widest text-ink-200">
           <a href="#browse" class="hover:text-white">Browse</a>
@@ -224,7 +224,7 @@
               We don't have artists in <span class="text-white" x-text="filters.city"></span> yet.
               We're adding new cities every week — want us to reach out when we do?
             </p>
-            <a :href="'mailto:hello@inkmatch.example.com?subject=Notify%20me%20when%20InkMatch%20launches%20in%20' + encodeURIComponent(filters.city)"
+            <a :href="'mailto:hello@chairside.ink?subject=Notify%20me%20when%20Chairside%20launches%20in%20' + encodeURIComponent(filters.city)"
                class="mt-6 inline-block rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-white">
               Notify me
             </a>
@@ -439,7 +439,7 @@
               @submit="submitting = true"
               class="mt-12 mx-auto max-w-2xl rounded-xl border border-ink-800 bg-ink-900/90 backdrop-blur-sm p-6 sm:p-8">
           <!-- FormSubmit config -->
-          <input type="hidden" name="_subject" value="New InkMatch artist submission">
+          <input type="hidden" name="_subject" value="New Chairside artist submission">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
           <input type="text" name="_honey" style="display:none">
@@ -501,9 +501,9 @@
       <div class="absolute inset-0 bg-gradient-to-b from-ink-950/95 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
       <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
         <p class="text-xs uppercase tracking-[0.3em] text-blood text-center">About</p>
-        <h2 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white text-center">Why InkMatch</h2>
+        <h2 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white text-center">Why Chairside</h2>
         <p class="mt-8 text-lg text-ink-200 text-center leading-relaxed">
-          Finding the right artist shouldn't mean hours scrolling Instagram. InkMatch groups tattoo
+          Finding the right artist shouldn't mean hours scrolling Instagram. Chairside groups tattoo
           artists by city and style so you can compare portfolios side by side — then reach out
           directly. Starting in Chattanooga, expanding city by city.
         </p>
@@ -517,17 +517,17 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
-        <span class="font-display text-xl tracking-widest text-white">INKMATCH</span>
+        <span class="font-display text-xl tracking-widest text-white">CHAIRSIDE</span>
       </div>
       <p class="text-sm text-ink-500">
-        &copy; <span x-data x-text="new Date().getFullYear()"></span> InkMatch. All rights reserved.
+        &copy; <span x-data x-text="new Date().getFullYear()"></span> Chairside. All rights reserved.
       </p>
     </div>
   </footer>
 
   <!-- Alpine state -->
   <script>
-    function inkmatch() {
+    function chairside() {
       return {
         loading: true,
         artists: [],
@@ -583,7 +583,7 @@
           const idx = this.saved.indexOf(id);
           if (idx === -1) this.saved.push(id);
           else this.saved.splice(idx, 1);
-          localStorage.setItem('inkmatch:saved', JSON.stringify(this.saved));
+          localStorage.setItem('chairside:saved', JSON.stringify(this.saved));
         },
         availabilityClass(status) {
           if (!status) return 'bg-ink-800 text-ink-200';
@@ -601,13 +601,13 @@
           } finally {
             this.loading = false;
           }
-          const savedCity = localStorage.getItem('inkmatch:city');
+          const savedCity = localStorage.getItem('chairside:city');
           if (savedCity) {
             this.filters.city = savedCity;
             this.cityInput = savedCity;
           }
           try {
-            const savedFavs = localStorage.getItem('inkmatch:saved');
+            const savedFavs = localStorage.getItem('chairside:saved');
             if (savedFavs) this.saved = JSON.parse(savedFavs);
           } catch (e) {
             this.saved = [];
@@ -619,14 +619,14 @@
           const clean = val.replace(/,\s*[A-Za-z]{2}$/, '').trim();
           const display = clean.replace(/\b\w/g, c => c.toUpperCase());
           this.filters.city = display;
-          localStorage.setItem('inkmatch:city', display);
+          localStorage.setItem('chairside:city', display);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         },
         changeCity() {
           this.filters = { city: '', styles: [], gender: '' };
           this.showSavedOnly = false;
           this.cityInput = '';
-          localStorage.removeItem('inkmatch:city');
+          localStorage.removeItem('chairside:city');
           this.$nextTick(() => this.$refs.cityInput?.focus());
         },
         openArtist(a) {

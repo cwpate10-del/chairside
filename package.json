@@ -1,7 +1,7 @@
 {
-  "name": "inkmatch",
+  "name": "chairside",
   "version": "0.1.0",
-  "description": "Find tattoo artists by city, style, and more.",
+  "description": "Chairside — find tattoo artists by city, style, and more.",
   "type": "module",
   "scripts": {
     "dev": "vite",
