@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>List Your Profile — Chairside</title>
+  <meta name="description" content="Submit your basic Chairside listing. Free forever. We build your profile within 48 hours.">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="canonical" href="https://chairside.ink/signup">
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="alternate icon" href="/favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/src/main.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body class="flex h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans">
+
+  <!-- Header -->
+  <header class="border-b border-ink-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center justify-between py-5">
+        <a href="/" class="flex items-center gap-2" aria-label="Chairside home">
+          <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
+          <span class="font-display text-3xl tracking-widest">CHAIRSIDE</span>
+        </a>
+        <a href="/" class="text-xs uppercase tracking-widest text-ink-200 hover:text-white">
+          ← Back to Chairside
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-auto">
+
+    <section class="relative overflow-hidden py-20 sm:py-28 bg-cover bg-center"
+             style="background-image: url('/images/tattooing-bw.jpg');">
+      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/90 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
+
+      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Intro -->
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-xs uppercase tracking-[0.3em] text-blood">Basic Listing · Free</p>
+          <h1 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white">
+            Fill out the basics.
+          </h1>
+          <p class="mt-6 text-lg text-ink-200">
+            We'll build your Chairside profile within 48 hours. No credit card, no catch.
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form action="https://formsubmit.co/romerochristopher240@gmail.com"
+              method="POST"
+              x-data="{ submitting: false }"
+              @submit="submitting = true"
+              class="mt-12 mx-auto max-w-2xl rounded-xl border border-ink-800 bg-ink-900/90 backdrop-blur-sm p-6 sm:p-8">
+
+          <input type="hidden" name="_subject" value="New Chairside artist submission">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://chairside.ink/signup?submitted=1">
+          <input type="text" name="_honey" style="display:none">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Name</span>
+              <input type="text" name="name" required
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Email</span>
+              <input type="email" name="email" required
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">City</span>
+              <input type="text" name="city" required placeholder="e.g. Chattanooga, TN"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Instagram</span>
+              <input type="text" name="instagram" required placeholder="@yourhandle"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Shop (optional)</span>
+              <input type="text" name="shop" placeholder="Where do you work?"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Styles</span>
+              <input type="text" name="styles" required placeholder="e.g. Fine Line, Blackwork"
+                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Anything else?</span>
+              <textarea name="notes" rows="3" placeholder="Availability, rates, links to portfolio…"
+                        class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood"></textarea>
+            </label>
+          </div>
+
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-ink-500">We'll reach out on Instagram or email to grab your photos.</p>
+            <button type="submit" :disabled="submitting"
+                    class="rounded-full bg-blood hover:bg-blood-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-white transition disabled:opacity-60">
+              <span x-show="!submitting">Submit</span>
+              <span x-show="submitting" x-cloak>Sending…</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Confirmation state -->
+        <div x-data="{ submitted: new URLSearchParams(window.location.search).get('submitted') === '1' }" x-show="submitted" x-cloak
+             class="mt-8 mx-auto max-w-2xl rounded-xl border border-blood bg-ink-900/90 backdrop-blur-sm p-6 sm:p-8 text-center">
+          <p class="font-display text-3xl tracking-widest text-white">You're in.</p>
+          <p class="mt-3 text-ink-200">
+            We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from <span class="text-white">hello@chairside.ink</span> within 48 hours.
+          </p>
+          <a href="/" class="mt-6 inline-block text-xs uppercase tracking-widest text-blood hover:text-white">← Back to Chairside</a>
+        </div>
+
+        <!-- Featured upgrade nudge -->
+        <div class="mt-16 max-w-2xl mx-auto rounded-xl border border-ink-800 bg-ink-900/60 backdrop-blur-sm p-6 sm:p-8 text-center">
+          <p class="text-xs uppercase tracking-[0.3em] text-blood">Want more reach?</p>
+          <p class="mt-3 text-ink-200">
+            Featured listings ($29/mo) sit at the top of city search, get a verified badge, and appear in the Recent Work spotlight. First 30 days free while we launch.
+          </p>
+          <a href="mailto:hello@chairside.ink?subject=Chairside%20Featured%20listing%20%E2%80%94%20start%20my%2030-day%20free%20trial"
+             class="mt-5 inline-block rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-xs uppercase tracking-widest font-semibold text-white transition">
+            Start Featured trial
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-ink-800 py-10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
+        <span class="font-display text-xl tracking-widest text-white">CHAIRSIDE</span>
+      </div>
+      <p class="text-sm text-ink-500">
+        &copy; <span x-data x-text="new Date().getFullYear()"></span> Chairside. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <style>[x-cloak] { display: none !important; }</style>
+</body>
+</html>
