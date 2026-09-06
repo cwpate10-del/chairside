@@ -24,7 +24,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
-<body class="flex h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans">
+<body class="flex min-h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans">
 
   <!-- Header -->
   <header class="border-b border-ink-800">
@@ -34,128 +34,203 @@
           <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
           <span class="font-display text-3xl tracking-widest">CHAIRSIDE</span>
         </a>
-        <a href="/" class="text-xs uppercase tracking-widest text-ink-200 hover:text-white">
-          ← Back to Chairside
+        <a href="/" class="text-xs uppercase tracking-widest text-ink-500 hover:text-white transition">
+          ← Back
         </a>
       </nav>
     </div>
   </header>
 
-  <main class="flex-auto">
+  <main class="flex-auto relative overflow-hidden">
 
-    <section class="relative overflow-hidden py-20 sm:py-28 bg-cover bg-center"
-             style="background-image: url('/images/tattooing-bw.jpg');">
-      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/90 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
+    <!-- Ambient background image + heavy overlay so text and thin inputs stay legible -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-40"
+         style="background-image: url('/images/tattooing-bw.jpg');" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-ink-950 via-ink-950/95 to-ink-950/70" aria-hidden="true"></div>
 
-      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 max-w-6xl mx-auto">
 
-        <!-- Intro -->
-        <div class="text-center max-w-2xl mx-auto">
-          <p class="text-xs uppercase tracking-[0.3em] text-blood">Basic Listing · Free</p>
-          <h1 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white">
-            Fill out the basics.
+        <!-- Left: pitch + what happens next -->
+        <div class="lg:sticky lg:top-8 lg:self-start">
+          <p class="text-xs uppercase tracking-[0.3em] text-blood">Chairside — Basic Listing</p>
+          <h1 class="mt-4 font-display text-6xl sm:text-7xl tracking-tight text-white leading-[0.95]">
+            Let's build<br/>your profile.
           </h1>
-          <p class="mt-6 text-lg text-ink-200">
-            We'll build your Chairside profile within 48 hours. No credit card, no catch.
+          <p class="mt-6 text-ink-200 leading-relaxed max-w-sm">
+            Give us the essentials. We'll pull your work from Instagram, put a proper page together, and hit you back within 48 hours — usually sooner.
+          </p>
+
+          <ol class="mt-12 space-y-5 max-w-sm">
+            <li class="flex gap-5">
+              <span class="text-blood font-display text-2xl leading-none pt-1">01</span>
+              <span class="text-sm text-ink-200 leading-relaxed">You fill out the form.</span>
+            </li>
+            <li class="flex gap-5">
+              <span class="text-blood font-display text-2xl leading-none pt-1">02</span>
+              <span class="text-sm text-ink-200 leading-relaxed">We build your page, pulling recent work from your IG.</span>
+            </li>
+            <li class="flex gap-5">
+              <span class="text-blood font-display text-2xl leading-none pt-1">03</span>
+              <span class="text-sm text-ink-200 leading-relaxed">You approve it. We go live.</span>
+            </li>
+          </ol>
+
+          <p class="mt-14 text-xs text-ink-500 max-w-sm leading-relaxed">
+            Free forever, no card. Want <span class="text-ink-200">Featured</span> ($29/mo, top of city search, first month free)?
+            <a href="mailto:hello@chairside.ink?subject=Chairside%20Featured%20trial"
+               class="text-blood hover:text-white underline underline-offset-4 decoration-blood hover:decoration-white transition">Email us instead</a>.
           </p>
         </div>
 
-        <!-- Form -->
+        <!-- Right: the form itself -->
         <form action="https://formsubmit.co/romerochristopher240@gmail.com"
               method="POST"
-              x-data="{ submitting: false }"
+              enctype="multipart/form-data"
+              x-data="{ submitting: false, files: [] }"
               @submit="submitting = true"
-              class="mt-12 mx-auto max-w-2xl rounded-xl border border-ink-800 bg-ink-900/90 backdrop-blur-sm p-6 sm:p-8">
+              class="space-y-10">
 
           <input type="hidden" name="_subject" value="New Chairside artist submission">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://chairside.ink/signup?submitted=1">
+          <input type="hidden" name="_next" value="https://chairside.ink/signup.html?submitted=1">
           <input type="text" name="_honey" style="display:none">
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label class="block">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Name</span>
-              <input type="text" name="name" required
-                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">01</span>
+              <span class="text-sm text-ink-200">Your name</span>
             </label>
-            <label class="block">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Email</span>
-              <input type="email" name="email" required
-                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
-            </label>
-            <label class="block">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">City</span>
-              <input type="text" name="city" required placeholder="e.g. Chattanooga, TN"
-                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
-            </label>
-            <label class="block">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Instagram</span>
-              <input type="text" name="instagram" required placeholder="@yourhandle"
-                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
-            </label>
-            <label class="block sm:col-span-2">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Shop (optional)</span>
-              <input type="text" name="shop" placeholder="Where do you work?"
-                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
-            </label>
-            <label class="block sm:col-span-2">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Styles</span>
-              <input type="text" name="styles" required placeholder="e.g. Fine Line, Blackwork"
-                     class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
-            </label>
-            <label class="block sm:col-span-2">
-              <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1.5">Anything else?</span>
-              <textarea name="notes" rows="3" placeholder="Availability, rates, links to portfolio…"
-                        class="w-full rounded-md border border-ink-700 bg-ink-800 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood"></textarea>
-            </label>
+            <input type="text" name="name" required autocomplete="name"
+                   class="signup-input">
           </div>
 
-          <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p class="text-xs text-ink-500">We'll reach out on Instagram or email to grab your photos.</p>
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">02</span>
+              <span class="text-sm text-ink-200">Email</span>
+            </label>
+            <input type="email" name="email" required autocomplete="email"
+                   class="signup-input">
+          </div>
+
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">03</span>
+              <span class="text-sm text-ink-200">Instagram handle</span>
+            </label>
+            <input type="text" name="instagram" required placeholder="@yourhandle"
+                   class="signup-input">
+          </div>
+
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">04</span>
+              <span class="text-sm text-ink-200">City you work in</span>
+            </label>
+            <input type="text" name="city" required placeholder="Chattanooga, TN"
+                   class="signup-input">
+          </div>
+
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">05</span>
+              <span class="text-sm text-ink-200">Shop <span class="text-ink-500">(if you have one)</span></span>
+            </label>
+            <input type="text" name="shop" placeholder="Where you tattoo out of"
+                   class="signup-input">
+          </div>
+
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">06</span>
+              <span class="text-sm text-ink-200">What you specialize in</span>
+            </label>
+            <input type="text" name="styles" required placeholder="Fine line, blackwork, traditional…"
+                   class="signup-input">
+          </div>
+
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">07</span>
+              <span class="text-sm text-ink-200">Portfolio photos <span class="text-ink-500">(optional, up to 6)</span></span>
+            </label>
+            <div class="mt-2 pl-[2.1rem]">
+              <label for="photos" class="signup-file group">
+                <span class="signup-file-icon" aria-hidden="true">↑</span>
+                <span class="signup-file-text flex-1">
+                  <span x-show="!files.length" class="text-ink-500">Click to select — JPG, PNG, or WebP</span>
+                  <span x-show="files.length" x-cloak class="text-white">
+                    <span x-text="files.length"></span>
+                    <span x-text="files.length === 1 ? 'photo' : 'photos'"></span> selected
+                  </span>
+                </span>
+                <span x-show="files.length" x-cloak
+                      @click.prevent="files = []; $refs.photos.value = ''"
+                      class="signup-file-clear">Clear</span>
+              </label>
+              <input id="photos" x-ref="photos" type="file" name="attachment"
+                     accept="image/jpeg,image/png,image/webp" multiple
+                     @change="files = Array.from($event.target.files)"
+                     class="sr-only">
+              <ul x-show="files.length" x-cloak class="mt-2 text-xs text-ink-500 space-y-1">
+                <template x-for="(f, i) in files" :key="i">
+                  <li class="truncate" x-text="f.name + ' · ' + (f.size / 1024 / 1024).toFixed(1) + ' MB'"></li>
+                </template>
+              </ul>
+              <p class="mt-3 text-xs text-ink-500">
+                Keep the total under ~10 MB. Skip this if you'd rather we pull work straight from your Instagram.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="flex items-baseline gap-3">
+              <span class="text-blood font-display text-lg leading-none">08</span>
+              <span class="text-sm text-ink-200">Anything else we should know?</span>
+            </label>
+            <textarea name="notes" rows="3" placeholder="Availability, rates, portfolio links, guest-spot schedule — whatever."
+                      class="signup-input signup-textarea"></textarea>
+          </div>
+
+          <div class="pt-4 flex items-baseline justify-between gap-6 flex-wrap">
+            <p class="text-xs text-ink-500 max-w-[15rem]">
+              We'll DM you on Instagram or email once your page is ready.
+            </p>
             <button type="submit" :disabled="submitting"
-                    class="rounded-full bg-blood hover:bg-blood-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-white transition disabled:opacity-60">
-              <span x-show="!submitting">Submit</span>
-              <span x-show="submitting" x-cloak>Sending…</span>
+                    class="group inline-flex items-baseline gap-2 text-lg text-white hover:text-blood transition disabled:opacity-50">
+              <span x-show="!submitting" class="border-b border-white group-hover:border-blood pb-1 transition">Send it</span>
+              <span x-show="submitting" x-cloak class="border-b border-ink-500 pb-1">Sending…</span>
+              <span aria-hidden="true" class="text-blood group-hover:translate-x-1 transition">→</span>
             </button>
           </div>
         </form>
 
-        <!-- Confirmation state -->
-        <div x-data="{ submitted: new URLSearchParams(window.location.search).get('submitted') === '1' }" x-show="submitted" x-cloak
-             class="mt-8 mx-auto max-w-2xl rounded-xl border border-blood bg-ink-900/90 backdrop-blur-sm p-6 sm:p-8 text-center">
-          <p class="font-display text-3xl tracking-widest text-white">You're in.</p>
-          <p class="mt-3 text-ink-200">
-            We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from <span class="text-white">hello@chairside.ink</span> within 48 hours.
-          </p>
-          <a href="/" class="mt-6 inline-block text-xs uppercase tracking-widest text-blood hover:text-white">← Back to Chairside</a>
-        </div>
-
-        <!-- Featured upgrade nudge -->
-        <div class="mt-16 max-w-2xl mx-auto rounded-xl border border-ink-800 bg-ink-900/60 backdrop-blur-sm p-6 sm:p-8 text-center">
-          <p class="text-xs uppercase tracking-[0.3em] text-blood">Want more reach?</p>
-          <p class="mt-3 text-ink-200">
-            Featured listings ($29/mo) sit at the top of city search, get a verified badge, and appear in the Recent Work spotlight. First 30 days free while we launch.
-          </p>
-          <a href="mailto:hello@chairside.ink?subject=Chairside%20Featured%20listing%20%E2%80%94%20start%20my%2030-day%20free%20trial"
-             class="mt-5 inline-block rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-xs uppercase tracking-widest font-semibold text-white transition">
-            Start Featured trial
-          </a>
-        </div>
-
       </div>
-    </section>
 
+      <!-- Confirmation state -->
+      <div x-data="{ submitted: new URLSearchParams(window.location.search).get('submitted') === '1' }"
+           x-show="submitted" x-cloak
+           class="relative mt-16 mx-auto max-w-2xl text-center">
+        <p class="font-display text-6xl tracking-tight text-white">You're in.</p>
+        <p class="mt-4 text-ink-200 leading-relaxed">
+          We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from <span class="text-white">hello@chairside.ink</span> within 48 hours.
+        </p>
+        <a href="/" class="mt-8 inline-block text-sm text-blood hover:text-white border-b border-blood hover:border-white pb-1 transition">← Back to Chairside</a>
+      </div>
+
+    </div>
   </main>
 
-  <footer class="border-t border-ink-800 py-10">
+  <footer class="border-t border-ink-800 py-8">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
         <span class="font-display text-xl tracking-widest text-white">CHAIRSIDE</span>
       </div>
-      <p class="text-sm text-ink-500">
-        &copy; <span x-data x-text="new Date().getFullYear()"></span> Chairside. All rights reserved.
+      <p class="text-xs text-ink-500">
+        &copy; <span x-data x-text="new Date().getFullYear()"></span> Chairside
       </p>
     </div>
   </footer>
