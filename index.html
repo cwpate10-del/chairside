@@ -34,7 +34,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/src/main.css">
 
@@ -82,14 +82,14 @@
       <nav class="flex items-center justify-between py-5" x-data="{ mobileMenuOpen: false }">
         <a href="/" class="flex items-center gap-2" aria-label="Chairside home">
           <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
-          <span class="font-display text-3xl tracking-widest">CHAIRSIDE</span>
+          <span class="font-display text-3xl">Chairside</span>
         </a>
         <div class="hidden md:flex items-center gap-x-8 text-sm uppercase tracking-widest text-ink-200">
           <a href="#browse" class="hover:text-white">Browse</a>
           <a href="#flash" class="hover:text-white">Flash</a>
-          <a href="#aftercare" class="hover:text-white">Aftercare</a>
-          <a href="#for-artists" class="hover:text-white">For Artists</a>
+          <a href="/aftercare.html" class="hover:text-white">Aftercare</a>
           <a href="#about" class="hover:text-white">About</a>
+          <a href="#for-artists" class="hover:text-white">For Artists</a>
           <button x-show="saved.length > 0" @click="showSavedOnly = !showSavedOnly"
                   class="flex items-center gap-1.5 text-blood hover:text-white transition"
                   :class="showSavedOnly ? 'text-white' : ''">
@@ -108,9 +108,9 @@
              class="absolute inset-x-0 top-16 z-40 mx-4 rounded-lg border border-ink-800 bg-ink-900 p-4 md:hidden">
           <a href="#browse" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">Browse</a>
           <a href="#flash" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">Flash</a>
-          <a href="#aftercare" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">Aftercare</a>
-          <a href="#for-artists" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">For Artists</a>
+          <a href="/aftercare.html" class="block py-2 text-ink-100">Aftercare</a>
           <a href="#about" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">About</a>
+          <a href="#for-artists" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">For Artists</a>
           <button x-show="saved.length > 0" @click="showSavedOnly = !showSavedOnly; mobileMenuOpen = false"
                   class="block py-2 text-blood">Saved (<span x-text="saved.length"></span>)</button>
         </div>
@@ -136,7 +136,7 @@
 
       <div class="relative w-full container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p class="text-xs uppercase tracking-[0.3em] text-blood">Find your artist</p>
-        <h1 class="mt-4 font-display text-6xl sm:text-8xl tracking-tight text-white leading-none">
+        <h1 class="mt-4 font-display text-6xl sm:text-8xl text-white leading-[0.95]">
           Where are<br/>you inking?
         </h1>
         <p class="mt-6 max-w-xl mx-auto text-lg text-ink-200">
@@ -172,7 +172,7 @@
         <div class="flex items-end justify-between flex-wrap gap-4">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-blood">Artist Spotlight</p>
-            <h2 class="mt-3 font-display text-4xl sm:text-6xl tracking-tight text-white">Recent Work</h2>
+            <h2 class="mt-3 font-display text-4xl sm:text-6xl text-white">Recent Work</h2>
           </div>
           <p class="text-sm text-ink-500 max-w-xs">
             A rotating look at what artists across the network are inking right now. Tap any piece to meet the artist.
@@ -190,7 +190,7 @@
                    class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
               <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent"></div>
               <div class="absolute inset-x-0 bottom-0 p-4 text-left">
-                <p class="font-display text-xl tracking-wide text-white leading-tight" x-text="artist.name"></p>
+                <p class="font-display text-xl text-white leading-tight" x-text="artist.name"></p>
                 <p class="mt-1 text-xs uppercase tracking-widest text-ink-200" x-text="artist.styles[0] + ' · ' + artist.city"></p>
               </div>
             </button>
@@ -208,7 +208,7 @@
         <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-blood">Artists near</p>
-            <h1 class="mt-2 font-display text-5xl sm:text-6xl tracking-tight text-white" x-text="filters.city"></h1>
+            <h1 class="mt-2 font-display text-5xl sm:text-6xl text-white" x-text="filters.city"></h1>
             <button @click="changeCity()"
                     class="mt-2 text-xs uppercase tracking-widest text-ink-500 hover:text-white">
               ← Change city
@@ -271,7 +271,7 @@
         <!-- Empty state (no artists in this city yet) -->
         <template x-if="!loading && cityHasNoArtists">
           <div class="mx-auto max-w-xl rounded-xl border border-ink-800 bg-ink-900 p-10 text-center">
-            <p class="font-display text-3xl tracking-widest text-white">Not here yet</p>
+            <p class="font-display text-3xl text-white">Not here yet</p>
             <p class="mt-3 text-ink-200">
               We don't have artists in <span class="text-white" x-text="filters.city"></span> yet.
               We're adding new cities every week — want us to reach out when we do?
@@ -289,7 +289,7 @@
         <!-- Empty state (city has artists but filters exclude them) -->
         <template x-if="!loading && !cityHasNoArtists && filtered.length === 0">
           <div class="mx-auto max-w-lg rounded-xl border border-ink-800 bg-ink-900 p-10 text-center">
-            <p class="font-display text-3xl tracking-widest text-white">No matches</p>
+            <p class="font-display text-3xl text-white">No matches</p>
             <p class="mt-3 text-ink-200">Try loosening the style or artist filter.</p>
           </div>
         </template>
@@ -320,7 +320,7 @@
                 </div>
                 <div class="p-5">
                   <div class="flex items-baseline justify-between gap-3">
-                    <h3 class="font-display text-2xl tracking-wide text-white" x-text="artist.name"></h3>
+                    <h3 class="font-display text-2xl text-white" x-text="artist.name"></h3>
                     <span class="text-xs uppercase tracking-widest text-ink-500" x-text="artist.city"></span>
                   </div>
                   <div class="mt-3 flex flex-wrap gap-2">
@@ -379,7 +379,7 @@
                   <img :src="selected.avatar" :alt="selected.name"
                        class="h-16 w-16 rounded-full object-cover border border-ink-700">
                   <div>
-                    <h2 class="font-display text-4xl tracking-wide text-white" x-text="selected.name"></h2>
+                    <h2 class="font-display text-4xl text-white" x-text="selected.name"></h2>
                     <p class="text-sm text-ink-200">
                       <span x-text="selected.city"></span>, <span x-text="selected.state"></span>
                     </p>
@@ -456,7 +456,7 @@
                              class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                       </div>
                       <div class="p-2">
-                        <p class="font-display text-sm sm:text-base tracking-wide text-white truncate" x-text="a.name"></p>
+                        <p class="font-display text-sm sm:text-base text-white truncate" x-text="a.name"></p>
                         <p class="text-[10px] uppercase tracking-widest text-ink-500 truncate" x-text="a.styles[0]"></p>
                       </div>
                     </button>
@@ -477,7 +477,7 @@
         <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-blood">Flash Marketplace</p>
-            <h2 class="mt-3 font-display text-4xl sm:text-6xl tracking-tight text-white">Ready-to-ink designs</h2>
+            <h2 class="mt-3 font-display text-4xl sm:text-6xl text-white">Ready-to-ink designs</h2>
           </div>
           <p class="text-sm text-ink-500 max-w-xs">
             Pre-drawn pieces from artists on the platform. Pick one, message the artist, book the session.
@@ -494,7 +494,7 @@
                      class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/40 to-transparent"></div>
                 <div class="absolute inset-x-0 bottom-0 p-3">
-                  <p class="font-display text-lg tracking-wide text-white leading-tight" x-text="piece.title || 'Untitled'"></p>
+                  <p class="font-display text-lg text-white leading-tight" x-text="piece.title || 'Untitled'"></p>
                   <div class="mt-1 flex items-center justify-between">
                     <p class="text-[10px] uppercase tracking-widest text-ink-200" x-text="piece.artist + ' · ' + piece.city"></p>
                     <p class="text-xs text-blood font-semibold" x-text="piece.price"></p>
@@ -508,7 +508,7 @@
         <!-- Empty state -->
         <template x-if="flash.length === 0">
           <div class="mx-auto max-w-xl rounded-xl border border-ink-800 bg-ink-900 p-10 text-center">
-            <p class="font-display text-3xl tracking-widest text-white">Coming soon</p>
+            <p class="font-display text-3xl text-white">Coming soon</p>
             <p class="mt-3 text-ink-200">
               Flash listings open with our first wave of artists. Want yours featured?
             </p>
@@ -524,111 +524,36 @@
       </div>
     </section>
 
-    <!-- AFTERCARE -->
-    <section id="aftercare"
-             class="relative border-t border-ink-800 py-20 sm:py-28"
-             style="background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 65%);">
+    <!-- AFTERCARE teaser strip (full guide lives on /aftercare.html) -->
+    <section id="aftercare" class="border-t border-ink-800 bg-ink-950">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-12">
-          <p class="text-xs uppercase tracking-[0.3em] text-blood">Aftercare</p>
-          <h2 class="mt-3 font-display text-4xl sm:text-6xl tracking-tight text-white">
-            Heal it right.
-          </h2>
-          <p class="mt-4 text-ink-200">
-            The stuff every artist tells you to buy — one shopping list, no guesswork.
-          </p>
-        </div>
+        <a href="/aftercare.html"
+           class="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-8 sm:py-10">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-blood">Aftercare</p>
+            <p class="mt-2 font-display text-3xl sm:text-4xl text-white group-hover:text-blood transition">
+              Just got tattooed? Heal it right.
+            </p>
+          </div>
+          <span class="shrink-0 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">
+            The shopping list →
+          </span>
+        </a>
+      </div>
+    </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
-
-          <a href="https://www.amazon.com/s?k=Hustle+Butter+Deluxe+5oz&tag=chairside-20" target="_blank" rel="noopener sponsored"
-             class="group grid grid-cols-2 rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-blood transition duration-300">
-            <div class="p-6 sm:p-7 flex flex-col justify-center">
-              <p class="text-[10px] uppercase tracking-widest text-blood">Days 1–14 · Balm</p>
-              <h3 class="mt-2 font-display text-2xl sm:text-3xl tracking-wide text-white group-hover:text-blood transition leading-tight">Hustle Butter Deluxe</h3>
-              <p class="mt-3 text-sm text-ink-200 leading-relaxed">Vegan tattoo balm. The tin most artists send you home with.</p>
-              <p class="mt-5 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">Shop on Amazon →</p>
-            </div>
-            <div class="aftercare-image aspect-square flex items-center justify-center">
-              <img src="https://placehold.co/600x600/f5efe4/8b7355/png?text=Hustle+Butter&font=lora" alt="Hustle Butter Deluxe"
-                   class="max-h-[75%] max-w-[70%] object-contain drop-shadow-2xl transition duration-500 group-hover:scale-105">
-            </div>
-          </a>
-
-          <a href="https://www.amazon.com/s?k=Saniderm+tattoo+bandage&tag=chairside-20" target="_blank" rel="noopener sponsored"
-             class="group grid grid-cols-2 rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-blood transition duration-300">
-            <div class="p-6 sm:p-7 flex flex-col justify-center">
-              <p class="text-[10px] uppercase tracking-widest text-blood">Days 1–5 · Bandage</p>
-              <h3 class="mt-2 font-display text-2xl sm:text-3xl tracking-wide text-white group-hover:text-blood transition leading-tight">Saniderm</h3>
-              <p class="mt-3 text-sm text-ink-200 leading-relaxed">Waterproof second-skin bandage. Sleep, shower, live your life.</p>
-              <p class="mt-5 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">Shop on Amazon →</p>
-            </div>
-            <div class="aftercare-image aspect-square flex items-center justify-center">
-              <img src="https://placehold.co/600x600/f5efe4/8b7355/png?text=Saniderm&font=lora" alt="Saniderm second-skin bandage"
-                   class="max-h-[75%] max-w-[70%] object-contain drop-shadow-2xl transition duration-500 group-hover:scale-105">
-            </div>
-          </a>
-
-          <a href="https://www.amazon.com/s?k=Aquaphor+Healing+Ointment&tag=chairside-20" target="_blank" rel="noopener sponsored"
-             class="group grid grid-cols-2 rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-blood transition duration-300">
-            <div class="p-6 sm:p-7 flex flex-col justify-center">
-              <p class="text-[10px] uppercase tracking-widest text-blood">First 3 days · Ointment</p>
-              <h3 class="mt-2 font-display text-2xl sm:text-3xl tracking-wide text-white group-hover:text-blood transition leading-tight">Aquaphor</h3>
-              <p class="mt-3 text-sm text-ink-200 leading-relaxed">Petroleum-based ointment for the raw stage. Thin layer, no pooling.</p>
-              <p class="mt-5 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">Shop on Amazon →</p>
-            </div>
-            <div class="aftercare-image aspect-square flex items-center justify-center">
-              <img src="https://placehold.co/600x600/f5efe4/8b7355/png?text=Aquaphor&font=lora" alt="Aquaphor Healing Ointment"
-                   class="max-h-[75%] max-w-[70%] object-contain drop-shadow-2xl transition duration-500 group-hover:scale-105">
-            </div>
-          </a>
-
-          <a href="https://www.amazon.com/s?k=Dr+Bronners+unscented+baby+soap&tag=chairside-20" target="_blank" rel="noopener sponsored"
-             class="group grid grid-cols-2 rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-blood transition duration-300">
-            <div class="p-6 sm:p-7 flex flex-col justify-center">
-              <p class="text-[10px] uppercase tracking-widest text-blood">Daily wash · Soap</p>
-              <h3 class="mt-2 font-display text-2xl sm:text-3xl tracking-wide text-white group-hover:text-blood transition leading-tight">Dr. Bronner's</h3>
-              <p class="mt-3 text-sm text-ink-200 leading-relaxed">Fragrance-free castile soap. Gentle two-a-day cleaning, dirt cheap.</p>
-              <p class="mt-5 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">Shop on Amazon →</p>
-            </div>
-            <div class="aftercare-image aspect-square flex items-center justify-center">
-              <img src="https://placehold.co/600x600/f5efe4/8b7355/png?text=Dr.+Bronner%27s&font=lora" alt="Dr. Bronner's Unscented Baby Soap"
-                   class="max-h-[75%] max-w-[70%] object-contain drop-shadow-2xl transition duration-500 group-hover:scale-105">
-            </div>
-          </a>
-
-          <a href="https://www.amazon.com/s?k=Aveeno+daily+moisturizing+lotion+unscented&tag=chairside-20" target="_blank" rel="noopener sponsored"
-             class="group grid grid-cols-2 rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-blood transition duration-300">
-            <div class="p-6 sm:p-7 flex flex-col justify-center">
-              <p class="text-[10px] uppercase tracking-widest text-blood">Week 2+ · Lotion</p>
-              <h3 class="mt-2 font-display text-2xl sm:text-3xl tracking-wide text-white group-hover:text-blood transition leading-tight">Aveeno Unscented</h3>
-              <p class="mt-3 text-sm text-ink-200 leading-relaxed">Fragrance-free lotion for the peeling and itching phase.</p>
-              <p class="mt-5 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">Shop on Amazon →</p>
-            </div>
-            <div class="aftercare-image aspect-square flex items-center justify-center">
-              <img src="https://placehold.co/600x600/f5efe4/8b7355/png?text=Aveeno&font=lora" alt="Aveeno Daily Moisturizing Lotion Unscented"
-                   class="max-h-[75%] max-w-[70%] object-contain drop-shadow-2xl transition duration-500 group-hover:scale-105">
-            </div>
-          </a>
-
-          <a href="https://www.amazon.com/s?k=EltaMD+UV+Clear+SPF+46&tag=chairside-20" target="_blank" rel="noopener sponsored"
-             class="group grid grid-cols-2 rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-blood transition duration-300">
-            <div class="p-6 sm:p-7 flex flex-col justify-center">
-              <p class="text-[10px] uppercase tracking-widest text-blood">Forever · Sunscreen</p>
-              <h3 class="mt-2 font-display text-2xl sm:text-3xl tracking-wide text-white group-hover:text-blood transition leading-tight">EltaMD SPF 46</h3>
-              <p class="mt-3 text-sm text-ink-200 leading-relaxed">Zinc-based sunscreen. The only thing that keeps healed ink sharp.</p>
-              <p class="mt-5 text-xs uppercase tracking-widest text-ink-500 group-hover:text-white transition">Shop on Amazon →</p>
-            </div>
-            <div class="aftercare-image aspect-square flex items-center justify-center">
-              <img src="https://placehold.co/600x600/f5efe4/8b7355/png?text=EltaMD+SPF&font=lora" alt="EltaMD UV Clear SPF 46"
-                   class="max-h-[75%] max-w-[70%] object-contain drop-shadow-2xl transition duration-500 group-hover:scale-105">
-            </div>
-          </a>
-
-        </div>
-
-        <p class="mt-10 text-center text-xs text-ink-500 max-w-lg mx-auto">
-          Chairside earns a small commission when you buy through these links. Costs you nothing extra. Every product here is one artists actually recommend.
+    <!-- About -->
+    <section id="about"
+             class="relative overflow-hidden border-t border-ink-800 py-28 sm:py-36 bg-cover bg-center"
+             style="background-image: url('/images/tattoo-neon.jpg');">
+      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/95 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
+      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+        <p class="text-xs uppercase tracking-[0.3em] text-blood text-center">About</p>
+        <h2 class="mt-4 font-display text-5xl sm:text-7xl text-white text-center">Why Chairside</h2>
+        <p class="mt-8 text-lg text-ink-200 text-center leading-relaxed">
+          Finding the right artist shouldn't mean hours scrolling Instagram. Chairside groups tattoo
+          artists by city and style so you can compare portfolios side by side — then reach out
+          directly. Starting in Chattanooga, expanding city by city.
         </p>
       </div>
     </section>
@@ -641,7 +566,7 @@
       <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto">
           <p class="text-xs uppercase tracking-[0.3em] text-blood">For Artists</p>
-          <h2 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white">
+          <h2 class="mt-4 font-display text-5xl sm:text-7xl text-white">
             Get on the map.
           </h2>
           <p class="mt-6 text-lg text-ink-200">
@@ -655,7 +580,7 @@
           <!-- Free tier -->
           <div class="rounded-xl border border-ink-800 bg-ink-900/90 backdrop-blur-sm p-8">
             <div class="flex items-baseline justify-between">
-              <p class="font-display text-3xl tracking-wide text-white">Basic</p>
+              <p class="font-display text-3xl text-white">Basic</p>
               <p class="text-2xl font-bold text-white">Free</p>
             </div>
             <p class="mt-2 text-sm text-ink-500">Forever. No credit card.</p>
@@ -677,7 +602,7 @@
               Recommended
             </span>
             <div class="flex items-baseline justify-between">
-              <p class="font-display text-3xl tracking-wide text-white">Featured</p>
+              <p class="font-display text-3xl text-white">Featured</p>
               <p class="text-white"><span class="text-2xl font-bold">$29</span><span class="text-sm text-ink-500">/mo</span></p>
             </div>
             <p class="mt-2 text-sm text-blood">First 30 days free while we're launching.</p>
@@ -700,22 +625,6 @@
       </div>
     </section>
 
-    <!-- About -->
-    <section id="about"
-             class="relative overflow-hidden border-t border-ink-800 py-28 sm:py-36 bg-cover bg-center"
-             style="background-image: url('/images/tattoo-neon.jpg');">
-      <div class="absolute inset-0 bg-gradient-to-b from-ink-950/95 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
-      <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-        <p class="text-xs uppercase tracking-[0.3em] text-blood text-center">About</p>
-        <h2 class="mt-4 font-display text-5xl sm:text-7xl tracking-tight text-white text-center">Why Chairside</h2>
-        <p class="mt-8 text-lg text-ink-200 text-center leading-relaxed">
-          Finding the right artist shouldn't mean hours scrolling Instagram. Chairside groups tattoo
-          artists by city and style so you can compare portfolios side by side — then reach out
-          directly. Starting in Chattanooga, expanding city by city.
-        </p>
-      </div>
-    </section>
-
   </main>
 
   <!-- Footer -->
@@ -723,7 +632,11 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
-        <span class="font-display text-xl tracking-widest text-white">CHAIRSIDE</span>
+        <span class="font-display text-xl text-white">Chairside</span>
+      </div>
+      <div class="flex items-center gap-6 text-sm text-ink-500">
+        <a href="/aftercare.html" class="hover:text-white transition">Aftercare</a>
+        <a href="/signup.html" class="hover:text-white transition">List your profile</a>
       </div>
       <p class="text-sm text-ink-500">
         &copy; <span x-data x-text="new Date().getFullYear()"></span> Chairside. All rights reserved.
