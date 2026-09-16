@@ -81,7 +81,7 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <nav class="flex items-center justify-between py-5" x-data="{ mobileMenuOpen: false }">
         <a href="/" class="flex items-center gap-2" aria-label="Chairside home">
-          <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
+          <span class="inline-block h-3 w-3 rounded-full bg-brass"></span>
           <span class="font-display text-3xl">Chairside</span>
         </a>
         <div class="hidden md:flex items-center gap-x-8 text-sm uppercase tracking-widest text-ink-200">
@@ -91,7 +91,7 @@
           <a href="#about" class="hover:text-white">About</a>
           <a href="#for-artists" class="hover:text-white">For Artists</a>
           <button x-show="saved.length > 0" @click="showSavedOnly = !showSavedOnly"
-                  class="flex items-center gap-1.5 text-blood hover:text-white transition"
+                  class="flex items-center gap-1.5 text-brass hover:text-white transition"
                   :class="showSavedOnly ? 'text-white' : ''">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
@@ -112,7 +112,7 @@
           <a href="#about" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">About</a>
           <a href="#for-artists" @click="mobileMenuOpen = false" class="block py-2 text-ink-100">For Artists</a>
           <button x-show="saved.length > 0" @click="showSavedOnly = !showSavedOnly; mobileMenuOpen = false"
-                  class="block py-2 text-blood">Saved (<span x-text="saved.length"></span>)</button>
+                  class="block py-2 text-brass">Saved (<span x-text="saved.length"></span>)</button>
         </div>
       </nav>
     </div>
@@ -135,7 +135,7 @@
       <div class="absolute inset-0 bg-gradient-to-b from-ink-950/85 via-ink-950/75 to-ink-950" aria-hidden="true"></div>
 
       <div class="relative w-full container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-xs uppercase tracking-[0.3em] text-blood">Find your artist</p>
+        <p class="text-xs uppercase tracking-[0.3em] text-brass">Find your artist</p>
         <h1 class="mt-4 font-display text-6xl sm:text-8xl text-white leading-[0.95]">
           Where are<br/>you inking?
         </h1>
@@ -151,9 +151,9 @@
                    x-ref="cityInput"
                    placeholder="e.g. Chattanooga"
                    autocomplete="address-level2"
-                   class="flex-1 rounded-md bg-ink-800 border border-ink-700 px-4 py-3 text-lg text-white placeholder-ink-500 focus:outline-none focus:border-blood">
+                   class="flex-1 rounded-md bg-ink-800 border border-ink-700 px-4 py-3 text-lg text-white placeholder-ink-500 focus:outline-none focus:border-brass">
             <button type="submit"
-                    class="rounded-md bg-blood hover:bg-blood-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-white">
+                    class="rounded-md bg-brass hover:bg-brass-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink">
               Find Artists
             </button>
           </div>
@@ -171,7 +171,7 @@
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <div class="flex items-end justify-between flex-wrap gap-4">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-blood">Artist Spotlight</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-brass">Artist Spotlight</p>
             <h2 class="mt-3 font-display text-4xl sm:text-6xl text-white">Recent Work</h2>
           </div>
           <p class="text-sm text-ink-500 max-w-xs">
@@ -185,7 +185,7 @@
         <div class="marquee-track flex gap-4 sm:gap-6 w-max">
           <template x-for="(artist, i) in [...featured, ...featured]" :key="artist.id + '-' + i">
             <button @click="openArtist(artist)"
-                    class="group relative shrink-0 w-56 sm:w-64 aspect-[3/4] overflow-hidden rounded-lg bg-ink-800 border border-ink-800 hover:border-blood transition duration-300">
+                    class="group relative shrink-0 w-56 sm:w-64 aspect-[3/4] overflow-hidden rounded-lg bg-ink-800 border border-ink-800 hover:border-brass transition duration-300">
               <img :src="artist.photos[0]" :alt="'Recent work by ' + artist.name"
                    class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
               <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent"></div>
@@ -207,7 +207,7 @@
         <!-- City header + style/gender filters -->
         <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-blood">Artists near</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-brass">Artists near</p>
             <h1 class="mt-2 font-display text-5xl sm:text-6xl text-white" x-text="filters.city"></h1>
             <button @click="changeCity()"
                     class="mt-2 text-xs uppercase tracking-widest text-ink-500 hover:text-white">
@@ -218,7 +218,7 @@
             <label class="block">
               <span class="block text-xs uppercase tracking-widest text-ink-500 mb-1">Artist</span>
               <select x-model="filters.gender"
-                      class="rounded-md border border-ink-700 bg-ink-900 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blood">
+                      class="rounded-md border border-ink-700 bg-ink-900 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brass">
                 <option value="">Any</option>
                 <option value="female">Female</option>
                 <option value="male">Male</option>
@@ -235,12 +235,12 @@
         <!-- Style pill filters -->
         <div class="mb-6">
           <p class="text-xs uppercase tracking-widest text-ink-500 mb-3">
-            Styles <span x-show="filters.styles.length" class="text-blood normal-case tracking-normal">(<span x-text="filters.styles.length"></span> selected)</span>
+            Styles <span x-show="filters.styles.length" class="text-brass normal-case tracking-normal">(<span x-text="filters.styles.length"></span> selected)</span>
           </p>
           <div class="flex flex-wrap gap-2">
             <template x-for="style in allStyles" :key="style">
               <button @click="toggleStyle(style)"
-                      :class="filters.styles.includes(style) ? 'bg-blood border-blood text-white' : 'border-ink-700 text-ink-200 hover:border-ink-500 hover:text-white'"
+                      :class="filters.styles.includes(style) ? 'bg-brass border-brass text-brass-ink' : 'border-ink-700 text-ink-200 hover:border-ink-500 hover:text-brass-ink'"
                       class="text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition"
                       x-text="style"></button>
             </template>
@@ -254,7 +254,7 @@
           </p>
           <button x-show="saved.length > 0"
                   @click="showSavedOnly = !showSavedOnly"
-                  :class="showSavedOnly ? 'bg-blood border-blood text-white' : 'border-ink-700 text-ink-200 hover:text-white'"
+                  :class="showSavedOnly ? 'bg-brass border-brass text-brass-ink' : 'border-ink-700 text-ink-200 hover:text-brass-ink'"
                   class="flex items-center gap-2 text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition">
             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
@@ -277,7 +277,7 @@
               We're adding new cities every week — want us to reach out when we do?
             </p>
             <a :href="'mailto:hello@chairside.ink?subject=Notify%20me%20when%20Chairside%20launches%20in%20' + encodeURIComponent(filters.city)"
-               class="mt-6 inline-block rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-white">
+               class="mt-6 inline-block rounded-full bg-brass hover:bg-brass-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink">
               Notify me
             </a>
             <p class="mt-6 text-xs text-ink-500">
@@ -297,12 +297,12 @@
         <!-- Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <template x-for="artist in filtered" :key="artist.id">
-            <div class="group relative rounded-xl overflow-hidden border border-ink-800 bg-ink-900 hover:border-blood hover:shadow-2xl hover:shadow-blood/20 transition duration-300">
+            <div class="group relative rounded-xl overflow-hidden border border-ink-800 bg-ink-900 hover:border-brass hover:shadow-2xl hover:shadow-brass/20 transition duration-300">
               <!-- Heart save button (absolute over image) -->
               <button @click.stop="toggleSaved(artist.id)"
                       :aria-label="isSaved(artist.id) ? 'Unsave' : 'Save'"
-                      class="absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-ink-950/70 backdrop-blur-sm hover:bg-blood flex items-center justify-center transition">
-                <svg class="h-4 w-4 transition" :class="isSaved(artist.id) ? 'fill-blood text-blood' : 'fill-none text-white'"
+                      class="group/save absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-ink-950/70 backdrop-blur-sm hover:bg-brass flex items-center justify-center transition">
+                <svg class="h-4 w-4 transition group-hover/save:text-brass-ink" :class="isSaved(artist.id) ? 'fill-brass text-brass group-hover/save:fill-brass-ink' : 'fill-none text-white'"
                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
                 </svg>
@@ -331,7 +331,7 @@
                   <p class="mt-4 text-sm text-ink-200 line-clamp-2" x-text="artist.bio"></p>
                   <div class="mt-4 flex items-center justify-between">
                     <p x-show="artist.pricing" class="text-xs text-ink-500" x-text="artist.pricing"></p>
-                    <p class="text-xs uppercase tracking-widest text-blood group-hover:text-white">View Profile →</p>
+                    <p class="text-xs uppercase tracking-widest text-brass group-hover:text-white">View Profile →</p>
                   </div>
                 </div>
               </button>
@@ -358,16 +358,16 @@
               <div class="absolute top-4 right-4 z-10 flex gap-2">
                 <button @click="toggleSaved(selected.id)"
                         :aria-label="isSaved(selected.id) ? 'Unsave' : 'Save'"
-                        class="h-9 w-9 rounded-full bg-ink-800 hover:bg-blood flex items-center justify-center transition">
-                  <svg class="h-4 w-4 transition" :class="isSaved(selected.id) ? 'fill-blood text-blood' : 'fill-none text-white'"
+                        class="group/save h-9 w-9 rounded-full bg-ink-800 hover:bg-brass flex items-center justify-center transition">
+                  <svg class="h-4 w-4 transition group-hover/save:text-brass-ink" :class="isSaved(selected.id) ? 'fill-brass text-brass group-hover/save:fill-brass-ink' : 'fill-none text-white'"
                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path d="M12 21s-7-4.5-9.5-9C.83 8.9 2.5 5 6 5c2 0 3.5 1.2 4.5 2.5C11.5 6.2 13 5 15 5c3.5 0 5.17 3.9 3.5 7-2.5 4.5-9.5 9-9.5 9z"/>
                   </svg>
                 </button>
                 <button @click="closeArtist()"
-                        class="h-9 w-9 rounded-full bg-ink-800 hover:bg-blood flex items-center justify-center"
+                        class="group/close h-9 w-9 rounded-full bg-ink-800 hover:bg-brass flex items-center justify-center"
                         aria-label="Close">
-                  <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="h-4 w-4 text-white group-hover/close:text-brass-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/>
                   </svg>
                 </button>
@@ -428,13 +428,13 @@
                   <p class="text-white font-semibold" x-text="selected.shop.name"></p>
                   <p class="text-sm text-ink-200 mt-1" x-text="selected.shop.address"></p>
                   <a :href="selected.shop.url" target="_blank" rel="noopener"
-                     class="mt-3 inline-block text-sm text-blood hover:text-white">Visit shop →</a>
+                     class="mt-3 inline-block text-sm text-brass hover:text-white">Visit shop →</a>
                 </div>
                 <div>
                   <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Follow</p>
                   <template x-if="selected.socials.instagram">
                     <a :href="selected.socials.instagram" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 text-white hover:text-blood">
+                       class="inline-flex items-center gap-2 text-white hover:text-brass">
                       <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.055 1.804.249 2.227.415.56.217.96.477 1.38.896.42.42.679.82.896 1.38.166.423.36 1.057.415 2.227.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.055 1.17-.249 1.804-.415 2.227a3.72 3.72 0 01-.896 1.38 3.72 3.72 0 01-1.38.896c-.423.166-1.057.36-2.227.415-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.055-1.804-.249-2.227-.415a3.72 3.72 0 01-1.38-.896 3.72 3.72 0 01-.896-1.38c-.166-.423-.36-1.057-.415-2.227C2.212 15.584 2.2 15.2 2.2 12s.012-3.584.07-4.85c.055-1.17.249-1.804.415-2.227.217-.56.477-.96.896-1.38.42-.42.82-.679 1.38-.896.423-.166 1.057-.36 2.227-.415C8.416 2.212 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.51.012-4.74.068-1.02.047-1.575.217-1.944.362-.489.19-.838.417-1.204.783a3.24 3.24 0 00-.783 1.204c-.145.369-.315.924-.362 1.944C3.912 8.49 3.9 8.85 3.9 12s.012 3.51.068 4.74c.047 1.02.217 1.575.362 1.944.19.489.417.838.783 1.204.366.366.715.593 1.204.783.369.145.924.315 1.944.362 1.23.056 1.59.068 4.74.068s3.51-.012 4.74-.068c1.02-.047 1.575-.217 1.944-.362.489-.19.838-.417 1.204-.783.366-.366.593-.715.783-1.204.145-.369.315-.924.362-1.944.056-1.23.068-1.59.068-4.74s-.012-3.51-.068-4.74c-.047-1.02-.217-1.575-.362-1.944a3.24 3.24 0 00-.783-1.204 3.24 3.24 0 00-1.204-.783c-.369-.145-.924-.315-1.944-.362C15.51 4.012 15.15 4 12 4zm0 3.05a4.95 4.95 0 110 9.9 4.95 4.95 0 010-9.9zm0 1.8a3.15 3.15 0 100 6.3 3.15 3.15 0 000-6.3zm5.2-1.98a1.16 1.16 0 110 2.32 1.16 1.16 0 010-2.32z"/>
                       </svg>
@@ -450,7 +450,7 @@
                 <div class="grid grid-cols-3 gap-3">
                   <template x-for="a in similarTo(selected)" :key="a.id">
                     <button @click="openArtist(a)"
-                            class="group text-left rounded-md overflow-hidden border border-ink-800 hover:border-blood transition">
+                            class="group text-left rounded-md overflow-hidden border border-ink-800 hover:border-brass transition">
                       <div class="aspect-square overflow-hidden bg-ink-800">
                         <img :src="a.photos[0]" :alt="a.name"
                              class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
@@ -476,7 +476,7 @@
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-blood">Flash Marketplace</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-brass">Flash Marketplace</p>
             <h2 class="mt-3 font-display text-4xl sm:text-6xl text-white">Ready-to-ink designs</h2>
           </div>
           <p class="text-sm text-ink-500 max-w-xs">
@@ -489,7 +489,7 @@
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <template x-for="piece in flash" :key="piece.id">
               <a :href="piece.contact || '#for-artists'" target="_blank" rel="noopener"
-                 class="group relative aspect-square overflow-hidden rounded-lg bg-ink-800 border border-ink-800 hover:border-blood transition duration-300">
+                 class="group relative aspect-square overflow-hidden rounded-lg bg-ink-800 border border-ink-800 hover:border-brass transition duration-300">
                 <img :src="piece.image" :alt="piece.title || 'Flash design'"
                      class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/40 to-transparent"></div>
@@ -497,7 +497,7 @@
                   <p class="font-display text-lg text-white leading-tight" x-text="piece.title || 'Untitled'"></p>
                   <div class="mt-1 flex items-center justify-between">
                     <p class="text-[10px] uppercase tracking-widest text-ink-200" x-text="piece.artist + ' · ' + piece.city"></p>
-                    <p class="text-xs text-blood font-semibold" x-text="piece.price"></p>
+                    <p class="text-xs text-brass font-semibold" x-text="piece.price"></p>
                   </div>
                 </div>
               </a>
@@ -513,7 +513,7 @@
               Flash listings open with our first wave of artists. Want yours featured?
             </p>
             <a href="#for-artists"
-               class="mt-6 inline-block rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-white">
+               class="mt-6 inline-block rounded-full bg-brass hover:bg-brass-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink">
               List your flash
             </a>
             <p class="mt-6 text-xs text-ink-500">
@@ -530,8 +530,8 @@
         <a href="/aftercare.html"
            class="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-8 sm:py-10">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-blood">Aftercare</p>
-            <p class="mt-2 font-display text-3xl sm:text-4xl text-white group-hover:text-blood transition">
+            <p class="text-xs uppercase tracking-[0.3em] text-brass">Aftercare</p>
+            <p class="mt-2 font-display text-3xl sm:text-4xl text-white group-hover:text-brass transition">
               Just got tattooed? Heal it right.
             </p>
           </div>
@@ -548,7 +548,7 @@
              style="background-image: url('/images/tattoo-neon.jpg');">
       <div class="absolute inset-0 bg-gradient-to-b from-ink-950/95 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
       <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-        <p class="text-xs uppercase tracking-[0.3em] text-blood text-center">About</p>
+        <p class="text-xs uppercase tracking-[0.3em] text-brass text-center">About</p>
         <h2 class="mt-4 font-display text-5xl sm:text-7xl text-white text-center">Why Chairside</h2>
         <p class="mt-8 text-lg text-ink-200 text-center leading-relaxed">
           Finding the right artist shouldn't mean hours scrolling Instagram. Chairside groups tattoo
@@ -565,7 +565,7 @@
       <div class="absolute inset-0 bg-gradient-to-b from-ink-950/90 via-ink-950/85 to-ink-950/95" aria-hidden="true"></div>
       <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto">
-          <p class="text-xs uppercase tracking-[0.3em] text-blood">For Artists</p>
+          <p class="text-xs uppercase tracking-[0.3em] text-brass">For Artists</p>
           <h2 class="mt-4 font-display text-5xl sm:text-7xl text-white">
             Get on the map.
           </h2>
@@ -585,37 +585,37 @@
             </div>
             <p class="mt-2 text-sm text-ink-500">Forever. No credit card.</p>
             <ul class="mt-6 space-y-3 text-sm text-ink-200">
-              <li class="flex gap-3"><span class="text-blood">✓</span> Full profile with up to 6 portfolio photos</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Show up in city + style search</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Direct-contact link (Instagram / email)</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Availability + rate range</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Full profile with up to 6 portfolio photos</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Show up in city + style search</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Direct-contact link (Instagram / email)</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Availability + rate range</li>
             </ul>
             <a href="/signup.html"
-               class="mt-8 block text-center rounded-full border border-ink-700 hover:border-blood hover:text-white px-6 py-3 text-sm uppercase tracking-widest text-ink-100 transition">
+               class="mt-8 block text-center rounded-full border border-ink-700 hover:border-brass hover:text-white px-6 py-3 text-sm uppercase tracking-widest text-ink-100 transition">
               Submit basic listing
             </a>
           </div>
 
           <!-- Featured tier -->
-          <div class="relative rounded-xl border-2 border-blood bg-ink-900/90 backdrop-blur-sm p-8">
-            <span class="absolute -top-3 left-6 bg-blood px-3 py-1 text-[10px] uppercase tracking-widest font-semibold text-white rounded-full">
+          <div class="relative rounded-xl border-2 border-brass bg-ink-900/90 backdrop-blur-sm p-8">
+            <span class="absolute -top-3 left-6 bg-brass px-3 py-1 text-[10px] uppercase tracking-widest font-semibold text-brass-ink rounded-full">
               Recommended
             </span>
             <div class="flex items-baseline justify-between">
               <p class="font-display text-3xl text-white">Featured</p>
               <p class="text-white"><span class="text-2xl font-bold">$29</span><span class="text-sm text-ink-500">/mo</span></p>
             </div>
-            <p class="mt-2 text-sm text-blood">First 30 days free while we're launching.</p>
+            <p class="mt-2 text-sm text-brass">First 30 days free while we're launching.</p>
             <ul class="mt-6 space-y-3 text-sm text-ink-200">
-              <li class="flex gap-3"><span class="text-blood">✓</span> <span>Everything in Basic, plus:</span></li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Top of search in your city</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Verified badge on your profile</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Unlimited portfolio photos</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Featured in the "Recent Work" carousel</li>
-              <li class="flex gap-3"><span class="text-blood">✓</span> Priority flash-marketplace placement</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> <span>Everything in Basic, plus:</span></li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Top of search in your city</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Verified badge on your profile</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Unlimited portfolio photos</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Featured in the "Recent Work" carousel</li>
+              <li class="flex gap-3"><span class="text-brass">✓</span> Priority flash-marketplace placement</li>
             </ul>
             <a href="mailto:hello@chairside.ink?subject=Chairside%20Featured%20listing%20%E2%80%94%20start%20my%2030-day%20free%20trial"
-               class="mt-8 block text-center rounded-full bg-blood hover:bg-blood-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-white transition">
+               class="mt-8 block text-center rounded-full bg-brass hover:bg-brass-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink transition">
               Start free trial
             </a>
           </div>
@@ -631,7 +631,7 @@
   <footer class="border-t border-ink-800 py-10">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
+        <span class="inline-block h-2 w-2 rounded-full bg-brass"></span>
         <span class="font-display text-xl text-white">Chairside</span>
       </div>
       <div class="flex items-center gap-6 text-sm text-ink-500">

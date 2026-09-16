@@ -31,7 +31,7 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <nav class="flex items-center justify-between py-5">
         <a href="/" class="flex items-center gap-2" aria-label="Chairside home">
-          <span class="inline-block h-3 w-3 rounded-full bg-blood"></span>
+          <span class="inline-block h-3 w-3 rounded-full bg-brass"></span>
           <span class="font-display text-3xl">Chairside</span>
         </a>
         <a href="/" class="text-xs uppercase tracking-widest text-ink-500 hover:text-white transition">
@@ -53,7 +53,7 @@
 
         <!-- Left: pitch + what happens next -->
         <div class="lg:sticky lg:top-8 lg:self-start">
-          <p class="text-xs uppercase tracking-[0.3em] text-blood">Chairside — Basic Listing</p>
+          <p class="text-xs uppercase tracking-[0.3em] text-brass">Chairside — Basic Listing</p>
           <h1 class="mt-4 font-display text-6xl sm:text-7xl text-white leading-[0.95]">
             Let's build<br/>your profile.
           </h1>
@@ -63,15 +63,15 @@
 
           <ol class="mt-12 space-y-5 max-w-sm">
             <li class="flex gap-5">
-              <span class="text-blood font-display text-2xl leading-none pt-1">01</span>
+              <span class="text-brass font-display text-2xl leading-none pt-1">01</span>
               <span class="text-sm text-ink-200 leading-relaxed">You fill out the form.</span>
             </li>
             <li class="flex gap-5">
-              <span class="text-blood font-display text-2xl leading-none pt-1">02</span>
+              <span class="text-brass font-display text-2xl leading-none pt-1">02</span>
               <span class="text-sm text-ink-200 leading-relaxed">We build your page, pulling recent work from your IG.</span>
             </li>
             <li class="flex gap-5">
-              <span class="text-blood font-display text-2xl leading-none pt-1">03</span>
+              <span class="text-brass font-display text-2xl leading-none pt-1">03</span>
               <span class="text-sm text-ink-200 leading-relaxed">You approve it. We go live.</span>
             </li>
           </ol>
@@ -79,7 +79,7 @@
           <p class="mt-14 text-xs text-ink-500 max-w-sm leading-relaxed">
             Free forever, no card. Want <span class="text-ink-200">Featured</span> ($29/mo, top of city search, first month free)?
             <a href="mailto:hello@chairside.ink?subject=Chairside%20Featured%20trial"
-               class="text-blood hover:text-white underline underline-offset-4 decoration-blood hover:decoration-white transition">Email us instead</a>.
+               class="text-brass hover:text-white underline underline-offset-4 decoration-brass hover:decoration-white transition">Email us instead</a>.
           </p>
         </div>
 
@@ -99,7 +99,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">01</span>
+              <span class="text-brass font-display text-lg leading-none">01</span>
               <span class="text-sm text-ink-200">Your name</span>
             </label>
             <input type="text" name="name" required autocomplete="name"
@@ -108,7 +108,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">02</span>
+              <span class="text-brass font-display text-lg leading-none">02</span>
               <span class="text-sm text-ink-200">Email</span>
             </label>
             <input type="email" name="email" required autocomplete="email"
@@ -117,7 +117,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">03</span>
+              <span class="text-brass font-display text-lg leading-none">03</span>
               <span class="text-sm text-ink-200">Instagram handle</span>
             </label>
             <input type="text" name="instagram" required placeholder="@yourhandle"
@@ -126,7 +126,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">04</span>
+              <span class="text-brass font-display text-lg leading-none">04</span>
               <span class="text-sm text-ink-200">City you work in</span>
             </label>
             <input type="text" name="city" required placeholder="Chattanooga, TN"
@@ -135,7 +135,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">05</span>
+              <span class="text-brass font-display text-lg leading-none">05</span>
               <span class="text-sm text-ink-200">Shop <span class="text-ink-500">(if you have one)</span></span>
             </label>
             <input type="text" name="shop" placeholder="Where you tattoo out of"
@@ -144,7 +144,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">06</span>
+              <span class="text-brass font-display text-lg leading-none">06</span>
               <span class="text-sm text-ink-200">What you specialize in</span>
             </label>
             <input type="text" name="styles" required placeholder="Fine line, blackwork, traditional…"
@@ -153,7 +153,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">07</span>
+              <span class="text-brass font-display text-lg leading-none">07</span>
               <span class="text-sm text-ink-200">Portfolio photos <span class="text-ink-500">(optional, up to 6)</span></span>
             </label>
             <div class="mt-2 pl-[2.1rem]">
@@ -187,7 +187,7 @@
 
           <div>
             <label class="flex items-baseline gap-3">
-              <span class="text-blood font-display text-lg leading-none">08</span>
+              <span class="text-brass font-display text-lg leading-none">08</span>
               <span class="text-sm text-ink-200">Anything else we should know?</span>
             </label>
             <textarea name="notes" rows="3" placeholder="Availability, rates, portfolio links, guest-spot schedule — whatever."
@@ -199,10 +199,10 @@
               We'll DM you on Instagram or email once your page is ready.
             </p>
             <button type="submit" :disabled="submitting"
-                    class="group inline-flex items-baseline gap-2 text-lg text-white hover:text-blood transition disabled:opacity-50">
-              <span x-show="!submitting" class="border-b border-white group-hover:border-blood pb-1 transition">Send it</span>
+                    class="group inline-flex items-baseline gap-2 text-lg text-white hover:text-brass transition disabled:opacity-50">
+              <span x-show="!submitting" class="border-b border-white group-hover:border-brass pb-1 transition">Send it</span>
               <span x-show="submitting" x-cloak class="border-b border-ink-500 pb-1">Sending…</span>
-              <span aria-hidden="true" class="text-blood group-hover:translate-x-1 transition">→</span>
+              <span aria-hidden="true" class="text-brass group-hover:translate-x-1 transition">→</span>
             </button>
           </div>
         </form>
@@ -217,7 +217,7 @@
         <p class="mt-4 text-ink-200 leading-relaxed">
           We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from <span class="text-white">hello@chairside.ink</span> within 48 hours.
         </p>
-        <a href="/" class="mt-8 inline-block text-sm text-blood hover:text-white border-b border-blood hover:border-white pb-1 transition">← Back to Chairside</a>
+        <a href="/" class="mt-8 inline-block text-sm text-brass hover:text-white border-b border-brass hover:border-white pb-1 transition">← Back to Chairside</a>
       </div>
 
     </div>
@@ -226,7 +226,7 @@
   <footer class="border-t border-ink-800 py-8">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <span class="inline-block h-2 w-2 rounded-full bg-blood"></span>
+        <span class="inline-block h-2 w-2 rounded-full bg-brass"></span>
         <span class="font-display text-xl text-white">Chairside</span>
       </div>
       <p class="text-xs text-ink-500">

@@ -8,8 +8,9 @@
   --color-ink-500: #6b6b6b;
   --color-ink-200: #d4d4d4;
   --color-ink-100: #f4f4f4;
-  --color-blood: #c0392b;
-  --color-blood-dark: #8b1e14;
+  --color-brass: #c9a227;
+  --color-brass-dark: #a8851d;
+  --color-brass-ink: #1a1405;
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-display: "Pirata One", serif;
@@ -48,7 +49,7 @@ html, body {
 }
 .signup-input:focus {
   outline: none;
-  border-bottom-color: var(--color-blood);
+  border-bottom-color: var(--color-brass);
 }
 .signup-textarea {
   resize: vertical;
@@ -57,7 +58,7 @@ html, body {
   padding-top: 0.5rem;
 }
 
-/* Photo upload zone — dashed border, blood-red arrow, feels like a real form element not a template widget */
+/* Photo upload zone — dashed border, brass-red arrow, feels like a real form element not a template widget */
 .signup-file {
   display: flex;
   align-items: center;
@@ -72,7 +73,7 @@ html, body {
   background-color: rgba(255, 255, 255, 0.02);
 }
 .signup-file-icon {
-  color: var(--color-blood);
+  color: var(--color-brass);
   font-size: 1.1rem;
   line-height: 1;
 }
@@ -90,7 +91,7 @@ html, body {
 }
 .signup-file-clear:hover {
   color: #fff;
-  border-color: var(--color-blood);
+  border-color: var(--color-brass);
 }
 
 /* Screen-reader-only utility for the hidden native file input */
