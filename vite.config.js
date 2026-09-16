@@ -10,6 +10,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         signup: resolve(__dirname, 'signup.html'),
         aftercare: resolve(__dirname, 'aftercare.html'),
+        welcome: resolve(__dirname, 'welcome.html'),
       },
     },
   },
