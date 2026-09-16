@@ -107,39 +107,6 @@ html, body {
 }
 
 /* Aftercare product image backdrop — warm apothecary neutrals against the dark site */
-.aftercare-image {
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255, 250, 240, 0.06), transparent 60%),
-    linear-gradient(135deg, #f5efe4 0%, #e8ddc7 55%, #d9cbb0 100%);
-  position: relative;
-  overflow: hidden;
-}
-.aftercare-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 95%, rgba(0, 0, 0, 0.15), transparent 60%);
-  pointer-events: none;
-}
-/* Empty state: if the product image is missing, show a stylized wordmark tile so nothing looks broken */
-.aftercare-image.aftercare-empty::before {
-  content: "";
-  position: absolute;
-  inset: 22%;
-  border: 1px solid rgba(51, 42, 30, 0.22);
-  border-radius: 4px;
-}
-.aftercare-image.aftercare-empty::after {
-  content: "Add product photo";
-  background: none;
-  color: rgba(51, 42, 30, 0.45);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 /* Style tag pill */
 .style-pill {
