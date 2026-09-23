@@ -163,3 +163,13 @@ select:autofill {
   caret-color: #fff;
   filter: none;            /* Firefox tints autofilled fields via filter */
 }
+
+/* Signup: the confirmation replaces the form rather than appearing beneath it.
+   Driven by a class set in <head> so neither state flashes on load. */
+.signup-done { display: none; }
+.is-submitted .signup-form-wrap { display: none; }
+.is-submitted .signup-done {
+  display: block;
+  min-height: 58vh;
+  padding-top: 4rem;
+}

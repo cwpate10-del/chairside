@@ -23,6 +23,12 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <script>
+    // set before render so the form never flashes when returning from a submit
+    if (new URLSearchParams(location.search).get('submitted') === '1') {
+      document.documentElement.classList.add('is-submitted');
+    }
+  </script>
 </head>
 <body class="flex min-h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans">
 
@@ -49,7 +55,7 @@
     <div class="absolute inset-0 bg-gradient-to-br from-ink-950 via-ink-950/95 to-ink-950/70" aria-hidden="true"></div>
 
     <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-      <div class="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 max-w-6xl mx-auto">
+      <div class="signup-form-wrap grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 max-w-6xl mx-auto">
 
         <!-- Left: pitch + what happens next -->
         <div class="lg:sticky lg:top-8 lg:self-start">
@@ -210,15 +216,28 @@
 
       </div>
 
-      <!-- Confirmation state -->
-      <div x-data="{ submitted: new URLSearchParams(window.location.search).get('submitted') === '1' }"
-           x-show="submitted" x-cloak
-           class="relative mt-16 mx-auto max-w-2xl text-center">
-        <p class="font-display text-6xl text-white">You're in.</p>
-        <p class="mt-4 text-ink-200 leading-relaxed">
-          We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from <span class="text-white">hello@chairside.ink</span> within 48 hours.
+      <!-- Confirmation state: replaces the form entirely -->
+      <div class="signup-done relative mx-auto max-w-2xl text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-brass">Submission received</p>
+        <p class="mt-5 font-display text-6xl sm:text-8xl text-white leading-[0.95]">You're in.</p>
+        <p class="mt-6 text-lg text-ink-200 leading-relaxed max-w-lg mx-auto">
+          We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from
+          <span class="text-white">hello@chairside.ink</span> within 48 hours.
         </p>
-        <a href="/" class="mt-8 inline-block text-sm text-brass hover:text-white border-b border-brass hover:border-white pb-1 transition">← Back to Chairside</a>
+        <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/"
+             class="rounded-full bg-brass hover:bg-brass-dark px-8 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink transition">
+            Back to Chairside
+          </a>
+          <a href="/signup.html"
+             class="rounded-full border border-ink-700 hover:border-brass px-8 py-3 text-sm uppercase tracking-widest text-ink-100 hover:text-white transition">
+            Submit another artist
+          </a>
+        </div>
+        <p class="mt-8 text-sm text-ink-500">
+          Want top of search in your city?
+          <a href="/#for-artists" class="text-brass hover:text-white border-b border-brass hover:border-white pb-0.5 transition">Go Featured</a>.
+        </p>
       </div>
 
     </div>
