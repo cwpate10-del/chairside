@@ -32,7 +32,7 @@ html, body {
   display: block;
   width: 100%;
   margin-top: 0.5rem;
-  padding: 0.6rem 0 0.6rem 2.1rem; /* left padding aligns text with the "01" number above */
+  padding: 0.6rem 0;
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--color-ink-700);
@@ -139,4 +139,27 @@ html, body {
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
+}
+
+/* Browsers paint their own light background on autofilled fields and ignore
+   background-color, which breaks the dark theme. Stalling the transition keeps
+   the field transparent; text-fill-color overrides the forced dark text. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+input:autofill,
+textarea:autofill,
+select:autofill {
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  filter: none;            /* Firefox tints autofilled fields via filter */
 }
