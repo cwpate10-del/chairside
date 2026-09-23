@@ -87,7 +87,7 @@
         <form action="https://formsubmit.co/romerochristopher240@gmail.com"
               method="POST"
               enctype="multipart/form-data"
-              x-data="{ submitting: false, files: [] }"
+              x-data="signupForm()"
               @submit="submitting = true"
               class="space-y-10">
 
@@ -160,27 +160,36 @@
               <label for="photos" class="signup-file group">
                 <span class="signup-file-icon" aria-hidden="true">↑</span>
                 <span class="signup-file-text flex-1">
-                  <span x-show="!files.length" class="text-ink-500">Click to select a JPG, PNG, or WebP</span>
-                  <span x-show="files.length" x-cloak class="text-white">
+                  <span x-show="!processing && !files.length" class="text-ink-500">Click to select a JPG, PNG, or WebP</span>
+                  <span x-show="processing" x-cloak class="text-white">Resizing photos…</span>
+                  <span x-show="!processing && files.length" x-cloak class="text-white">
                     <span x-text="files.length"></span>
-                    <span x-text="files.length === 1 ? 'photo' : 'photos'"></span> selected
+                    <span x-text="files.length === 1 ? 'photo' : 'photos'"></span> ready
+                    <span class="text-ink-500" x-text="'· ' + totalMB + ' MB total'"></span>
                   </span>
                 </span>
                 <span x-show="files.length" x-cloak
-                      @click.prevent="files = []; $refs.photos.value = ''"
+                      @click.prevent="files = []; oversize = false; $refs.photos.value = ''"
                       class="signup-file-clear">Clear</span>
               </label>
               <input id="photos" x-ref="photos" type="file" name="attachment"
                      accept="image/jpeg,image/png,image/webp" multiple
-                     @change="files = Array.from($event.target.files)"
+                     @change="processFiles($event)"
                      class="sr-only">
               <ul x-show="files.length" x-cloak class="mt-2 text-xs text-ink-500 space-y-1">
                 <template x-for="(f, i) in files" :key="i">
-                  <li class="truncate" x-text="f.name + ' · ' + (f.size / 1024 / 1024).toFixed(1) + ' MB'"></li>
+                  <li class="truncate">
+                    <span x-text="f.name"></span>
+                    <span class="text-ink-500" x-text="' · ' + (f.size / 1024 / 1024).toFixed(1) + ' MB'"></span>
+                    <span x-show="f.saved" x-cloak class="text-brass" x-text="' (was ' + f.saved + ' MB)'"></span>
+                  </li>
                 </template>
               </ul>
+              <p x-show="oversize" x-cloak class="mt-3 text-xs text-brass">
+                Still over 10 MB after resizing. Remove a photo or two, or skip this and we'll pull from your Instagram.
+              </p>
               <p class="mt-3 text-xs text-ink-500">
-                Keep the total under ~10 MB. Skip this if you'd rather we pull work straight from your Instagram.
+                We shrink these for you, so big phone photos are fine. Skip this if you'd rather we pull work straight from your Instagram.
               </p>
             </div>
           </div>
@@ -235,6 +244,60 @@
     </div>
   </footer>
 
+
+  <script>
+    function signupForm() {
+      return {
+        submitting: false,
+        processing: false,
+        files: [],
+        oversize: false,
+
+        get totalMB() {
+          return (this.files.reduce((n, f) => n + f.size, 0) / 1024 / 1024).toFixed(1);
+        },
+
+        // FormSubmit rejects anything over 10 MB total, and a single phone photo
+        // is often 3-5 MB. Resize before upload so a normal submission fits.
+        async shrink(file) {
+          if (!file.type.startsWith('image/')) return file;
+          let bitmap;
+          try { bitmap = await createImageBitmap(file); } catch (e) { return file; }
+          const MAX = 1600;
+          const scale = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
+          const w = Math.round(bitmap.width * scale);
+          const h = Math.round(bitmap.height * scale);
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+          if (bitmap.close) bitmap.close();
+          const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.82));
+          if (!blob || blob.size >= file.size) return file;   // never make it bigger
+          const out = new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg',
+                               { type: 'image/jpeg', lastModified: Date.now() });
+          out.saved = (file.size / 1024 / 1024).toFixed(1);
+          return out;
+        },
+
+        async processFiles(e) {
+          const picked = Array.from(e.target.files);
+          if (!picked.length) { this.files = []; this.oversize = false; return; }
+          this.processing = true;
+          const done = [];
+          for (const f of picked) done.push(await this.shrink(f));
+          // hand the compressed versions back to the input so the form posts those
+          try {
+            const dt = new DataTransfer();
+            done.forEach(f => dt.items.add(f));
+            e.target.files = dt.files;
+          } catch (err) { /* older browser: original files still post */ }
+          this.files = done;
+          this.oversize = done.reduce((n, f) => n + f.size, 0) > 10 * 1024 * 1024;
+          this.processing = false;
+        },
+      };
+    }
+  </script>
   <style>[x-cloak] { display: none !important; }</style>
 </body>
 </html>

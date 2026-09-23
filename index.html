@@ -273,13 +273,22 @@
           <div class="mx-auto max-w-xl rounded-xl border border-ink-800 bg-ink-900 p-10 text-center">
             <p class="font-display text-3xl text-white">Not here yet</p>
             <p class="mt-3 text-ink-200">
-              We don't have artists in <span class="text-white" x-text="filters.city"></span> yet.
-              We're adding new cities every week. Want us to reach out when we do?
+              No artists listed in <span class="text-white" x-text="filters.city"></span> yet.
+              Chairside is new and filling in city by city.
             </p>
-            <a :href="'mailto:hello@chairside.ink?subject=Notify%20me%20when%20Chairside%20launches%20in%20' + encodeURIComponent(filters.city)"
-               class="mt-6 inline-block rounded-full bg-brass hover:bg-brass-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink">
-              Notify me
-            </a>
+            <div class="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
+              <a :href="'mailto:hello@chairside.ink?subject=Notify%20me%20when%20Chairside%20covers%20' + encodeURIComponent(filters.city)"
+                 class="rounded-full bg-brass hover:bg-brass-dark px-6 py-3 text-sm uppercase tracking-widest font-semibold text-brass-ink transition">
+                Tell me when it does
+              </a>
+              <a href="/signup.html"
+                 class="rounded-full border border-ink-700 hover:border-brass px-6 py-3 text-sm uppercase tracking-widest text-ink-100 hover:text-white transition">
+                I tattoo here
+              </a>
+            </div>
+            <p class="mt-5 text-sm text-ink-200">
+              Tattoo in <span class="text-white" x-text="filters.city"></span>? Be the first one listed. It's free.
+            </p>
             <p class="mt-6 text-xs text-ink-500">
               Or <button @click="changeCity()" class="underline hover:text-white">try another city</button>.
             </p>
