@@ -186,12 +186,19 @@
           <template x-for="(artist, i) in [...featured, ...featured]" :key="artist.id + '-' + i">
             <button @click="openArtist(artist)"
                     class="group relative shrink-0 w-56 sm:w-64 aspect-[3/4] overflow-hidden rounded-lg bg-ink-800 border border-ink-800 hover:border-brass transition duration-300">
-              <img :src="artist.photos[0]" :alt="'Recent work by ' + artist.name"
-                   class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+              <template x-if="artist.photos && artist.photos.length">
+                <img :src="artist.photos[0]" :alt="'Recent work by ' + artist.name"
+                     class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+              </template>
+              <template x-if="!artist.photos || !artist.photos.length">
+                <div class="h-full w-full flex items-center justify-center bg-gradient-to-b from-ink-800 to-ink-950">
+                  <span class="font-display text-6xl leading-none text-brass/30" x-text="artist.name.charAt(0)"></span>
+                </div>
+              </template>
               <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent"></div>
               <div class="absolute inset-x-0 bottom-0 p-4 text-left">
                 <p class="font-display text-xl text-white leading-tight" x-text="artist.name"></p>
-                <p class="mt-1 text-xs uppercase tracking-widest text-ink-200" x-text="artist.styles[0] + ' · ' + artist.city"></p>
+                <p class="mt-1 text-xs uppercase tracking-widest text-ink-200" x-text="(artist.styles && artist.styles.length ? artist.styles[0] + ' · ' : '') + artist.city"></p>
               </div>
             </button>
           </template>
@@ -318,8 +325,16 @@
               </button>
               <button @click="openArtist(artist)" class="text-left w-full">
                 <div class="relative aspect-square overflow-hidden bg-ink-800">
-                  <img :src="artist.photos[0]" :alt="artist.name + ' portfolio work'"
-                       class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                  <template x-if="artist.photos && artist.photos.length">
+                    <img :src="artist.photos[0]" :alt="artist.name + ' portfolio work'"
+                         class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                  </template>
+                  <template x-if="!artist.photos || !artist.photos.length">
+                    <div class="h-full w-full flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-ink-800 to-ink-950">
+                      <span class="font-display text-6xl leading-none text-brass/30" x-text="artist.name.charAt(0)"></span>
+                      <span class="text-[10px] uppercase tracking-widest text-ink-500">Portfolio not added</span>
+                    </div>
+                  </template>
                   <div class="absolute inset-0 bg-gradient-to-t from-ink-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
                   <!-- Availability badge on image -->
                   <span x-show="artist.availability"
@@ -337,7 +352,7 @@
                       <span class="style-pill" x-text="style"></span>
                     </template>
                   </div>
-                  <p class="mt-4 text-sm text-ink-200 line-clamp-2" x-text="artist.bio"></p>
+                  <p x-show="artist.bio" class="mt-4 text-sm text-ink-200 line-clamp-2" x-text="artist.bio"></p>
                   <div class="mt-4 flex items-center justify-between">
                     <p x-show="artist.pricing" class="text-xs text-ink-500" x-text="artist.pricing"></p>
                     <p class="text-xs uppercase tracking-widest text-brass group-hover:text-white">View Profile →</p>
@@ -385,8 +400,15 @@
               <!-- Header -->
               <div class="p-6 sm:p-8 border-b border-ink-800">
                 <div class="flex items-center gap-4">
-                  <img :src="selected.avatar" :alt="selected.name"
-                       class="h-16 w-16 rounded-full object-cover border border-ink-700">
+                  <template x-if="selected.avatar">
+                    <img :src="selected.avatar" :alt="selected.name"
+                         class="h-16 w-16 rounded-full object-cover border border-ink-700">
+                  </template>
+                  <template x-if="!selected.avatar">
+                    <div class="h-16 w-16 shrink-0 rounded-full border border-ink-700 bg-ink-800 flex items-center justify-center">
+                      <span class="font-display text-3xl leading-none text-brass/50" x-text="selected.name.charAt(0)"></span>
+                    </div>
+                  </template>
                   <div>
                     <h2 class="font-display text-4xl text-white" x-text="selected.name"></h2>
                     <p class="text-sm text-ink-200">
@@ -414,18 +436,26 @@
                   </div>
                 </div>
 
-                <p class="mt-5 text-ink-100 leading-relaxed" x-text="selected.bio"></p>
+                <p x-show="selected.bio" class="mt-5 text-ink-100 leading-relaxed" x-text="selected.bio"></p>
               </div>
 
               <!-- Photo gallery -->
               <div class="p-6 sm:p-8 border-b border-ink-800">
                 <p class="text-xs uppercase tracking-widest text-ink-500 mb-4">Portfolio</p>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div x-show="selected.photos && selected.photos.length" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <template x-for="(photo, i) in selected.photos" :key="i">
                     <div class="aspect-square overflow-hidden rounded-md bg-ink-800">
                       <img :src="photo" :alt="selected.name + ' work ' + (i+1)"
                            class="h-full w-full object-cover">
                     </div>
+                  </template>
+                </div>
+                <div x-show="!selected.photos || !selected.photos.length"
+                     class="rounded-md border border-dashed border-ink-700 px-5 py-6 text-center">
+                  <p class="text-sm text-ink-200">No portfolio on Chairside yet.</p>
+                  <template x-if="selected.socials && selected.socials.instagram">
+                    <a :href="selected.socials.instagram" target="_blank" rel="noopener"
+                       class="mt-2 inline-block text-sm text-brass hover:text-white">See their work on Instagram &rarr;</a>
                   </template>
                 </div>
               </div>
@@ -461,8 +491,15 @@
                     <button @click="openArtist(a)"
                             class="group text-left rounded-md overflow-hidden border border-ink-800 hover:border-brass transition">
                       <div class="aspect-square overflow-hidden bg-ink-800">
-                        <img :src="a.photos[0]" :alt="a.name"
-                             class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                        <template x-if="a.photos && a.photos.length">
+                          <img :src="a.photos[0]" :alt="a.name"
+                               class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                        </template>
+                        <template x-if="!a.photos || !a.photos.length">
+                          <div class="h-full w-full flex items-center justify-center bg-gradient-to-b from-ink-800 to-ink-950">
+                            <span class="font-display text-3xl leading-none text-brass/30" x-text="a.name.charAt(0)"></span>
+                          </div>
+                        </template>
                       </div>
                       <div class="p-2">
                         <p class="font-display text-sm sm:text-base text-white truncate" x-text="a.name"></p>
