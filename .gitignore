@@ -42,3 +42,9 @@ yarn-error.log*
 
 # Image generation scratch (finals live in public/images/)
 nanobanana-output/
+
+# Pending artist roster — local only, never published until artists opt in
+data/
+
+# Generated static pages (built from public/shops.json at build time)
+chattanooga/

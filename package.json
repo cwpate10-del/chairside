@@ -1,17 +1,18 @@
 {
   "name": "chairside",
   "version": "0.1.0",
-  "description": "Chairside — find tattoo artists by city, style, and more.",
+  "description": "Chairside \u2014 find tattoo artists by city, style, and more.",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node scripts/generate-pages.mjs && vite",
+    "build": "node scripts/generate-pages.mjs && vite build",
     "preview": "vite preview",
     "deploy": "bash scripts/deploy.sh",
     "publish:github": "bash scripts/publish-github.sh",
     "publish:cloudflare": "bash scripts/publish-cloudflare.sh",
     "publish:netlify": "bash scripts/publish-netlify.sh",
-    "publish:vercel": "bash scripts/publish-vercel.sh"
+    "publish:vercel": "bash scripts/publish-vercel.sh",
+    "generate": "node scripts/generate-pages.mjs"
   },
   "keywords": [
     "tattoo",
