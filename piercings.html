@@ -67,7 +67,7 @@
         <h1 class="mt-3 font-display text-5xl sm:text-7xl text-white">Piercers in Chattanooga</h1>
         <p class="mt-4 max-w-xl text-ink-100">
           Piercing is its own craft and it gets buried at the bottom of tattoo shop pages.
-          This is who does it locally and what they specialize in. After a tattoo instead?
+          This is who does it locally and how to reach them. After a tattoo instead?
           <a href="/#browse" class="text-brass hover:text-white">Browse artists by style</a>.
         </p>
         <a href="#piercers"
@@ -80,23 +80,8 @@
     <!-- Piercer directory -->
     <section id="piercers" class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
 
-      <!-- Specialty filters -->
-      <div x-show="piercers.length > 0" x-cloak class="mb-8">
-        <p class="text-xs uppercase tracking-widest text-ink-500 mb-3">Specialties</p>
-        <div class="flex flex-wrap gap-2">
-          <template x-for="p in allPiercings" :key="p">
-            <button @click="toggle(p)"
-                    :class="filters.includes(p) ? 'bg-brass border-brass text-brass-ink' : 'border-ink-700 text-ink-200 hover:border-ink-500'"
-                    class="text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition"
-                    x-text="p"></button>
-          </template>
-        </div>
-        <button x-show="filters.length" @click="filters = []"
-                class="mt-3 text-xs uppercase tracking-widest text-ink-500 hover:text-brass">Clear filters</button>
-      </div>
-
       <p x-show="!loading && piercers.length > 0" x-cloak class="text-sm text-ink-500 mb-5">
-        <span x-text="filtered.length"></span> piercer<span x-show="filtered.length !== 1">s</span> listed
+        <span x-text="piercers.length"></span> piercer<span x-show="piercers.length !== 1">s</span> listed
       </p>
 
       <!-- Loading -->
@@ -117,14 +102,9 @@
         </a>
       </div>
 
-      <!-- Filtered everything out -->
-      <p x-show="!loading && piercers.length > 0 && filtered.length === 0" x-cloak class="text-ink-200">
-        No piercers match those specialties yet.
-      </p>
-
       <!-- Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <template x-for="p in filtered" :key="p.id">
+        <template x-for="p in piercers" :key="p.id">
           <article class="rounded-xl border border-ink-800 bg-ink-900 overflow-hidden">
             <template x-if="p.photos && p.photos.length">
               <div class="aspect-square overflow-hidden bg-ink-800">
@@ -188,25 +168,6 @@
       return {
         loading: true,
         piercers: [],
-        filters: [],
-        allPiercings: [
-          'Ear Curation', 'Lobes', 'Helix', 'Daith', 'Conch', 'Tragus', 'Rook',
-          'Industrial', 'Septum', 'Nostril', 'Eyebrow', 'Navel', 'Nipple',
-          'Surface & Dermal', 'Oral', 'Stretching', 'Jewelry & Styling'
-        ],
-
-        get filtered() {
-          if (!this.filters.length) return this.piercers;
-          return this.piercers.filter(p =>
-            this.filters.every(f => (p.piercings || []).includes(f))
-          );
-        },
-
-        toggle(p) {
-          const i = this.filters.indexOf(p);
-          if (i === -1) this.filters.push(p);
-          else this.filters.splice(i, 1);
-        },
 
         async load() {
           try {
