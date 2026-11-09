@@ -121,6 +121,17 @@
 
           <div>
             <label class="block">
+              <span class="text-sm font-medium text-white">What do you do?</span>
+            </label>
+            <select name="service" x-model="service" required class="signup-input">
+              <option value="tattoo">Tattoos</option>
+              <option value="piercing">Piercings</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block">
               <span class="text-sm font-medium text-white">Social media handle <span class="text-ink-500">(optional)</span></span>
             </label>
             <input type="text" name="social" placeholder="@yourhandle"
@@ -159,11 +170,19 @@
                    class="signup-input">
           </div>
 
-          <div>
+          <div x-show="doesTattoo">
             <label class="block">
-              <span class="text-sm font-medium text-white">What you specialize in</span>
+              <span class="text-sm font-medium text-white">Tattoo styles you specialize in</span>
             </label>
-            <input type="text" name="styles" required placeholder="Fine line, blackwork, traditional…"
+            <input type="text" name="styles" :required="doesTattoo" placeholder="Fine line, blackwork, traditional…"
+                   class="signup-input">
+          </div>
+
+          <div x-show="doesPiercing" x-cloak>
+            <label class="block">
+              <span class="text-sm font-medium text-white">Piercings you do</span>
+            </label>
+            <input type="text" name="piercings" :required="doesPiercing && !doesTattoo" placeholder="Ear curation, septum, navel, dermals…"
                    class="signup-input">
           </div>
 
@@ -287,6 +306,10 @@
         processing: false,
         files: [],
         oversize: false,
+        service: 'tattoo',
+
+        get doesTattoo() { return this.service === 'tattoo' || this.service === 'both'; },
+        get doesPiercing() { return this.service === 'piercing' || this.service === 'both'; },
 
         get totalMB() {
           return (this.files.reduce((n, f) => n + f.size, 0) / 1024 / 1024).toFixed(1);

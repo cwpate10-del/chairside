@@ -28,6 +28,7 @@ export default defineConfig({
         signup: resolve(__dirname, 'signup.html'),
         aftercare: resolve(__dirname, 'aftercare.html'),
         welcome: resolve(__dirname, 'welcome.html'),
+        piercings: resolve(__dirname, 'piercings.html'),
         ...generatedPages(resolve(__dirname, 'chattanooga')),
       },
     },

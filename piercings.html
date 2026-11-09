@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Piercers in Chattanooga | Chairside</title>
+  <meta name="description" content="Find a piercer in Chattanooga by what they specialize in. Ear curation, septum, navel, dermals and more, with the studios that do them.">
+  <meta name="keywords" content="piercer chattanooga, ear curation chattanooga, body piercing chattanooga, septum piercing, piercing studio">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="canonical" href="https://chairside.ink/piercings.html">
+
+  <meta property="og:title" content="Piercers in Chattanooga | Chairside">
+  <meta property="og:description" content="Find a piercer in Chattanooga by what they specialize in.">
+  <meta property="og:url" content="https://chairside.ink/piercings.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chairside">
+  <meta property="og:image" content="https://chairside.ink/images/tattooing-bw.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="alternate icon" href="/favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/src/main.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body class="flex h-full flex-col bg-ink-950 text-ink-100 antialiased font-sans"
+      x-data="piercings()" x-init="load()">
+
+  <!-- Header -->
+  <header class="border-b border-ink-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center justify-between py-5">
+        <a href="/" class="flex items-center gap-2" aria-label="Chairside home">
+          <span class="inline-block h-3 w-3 rounded-full bg-brass"></span>
+          <span class="font-display text-3xl">Chairside</span>
+        </a>
+        <div class="hidden md:flex items-center gap-x-8 text-sm uppercase tracking-widest text-ink-200">
+          <a href="/#browse" class="hover:text-white">Tattoos</a>
+          <a href="/piercings.html" class="text-brass">Piercings</a>
+          <a href="/chattanooga/shops/" class="hover:text-white">Shops</a>
+          <a href="/aftercare.html" class="hover:text-white">Aftercare</a>
+          <a href="/signup.html" class="hover:text-white">For Artists</a>
+        </div>
+        <a href="/#browse" class="md:hidden text-sm uppercase tracking-widest text-brass">Tattoos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- Intro -->
+    <section class="container mx-auto px-4 sm:px-6 lg:px-8 pt-14 sm:pt-20 pb-8">
+      <p class="text-xs uppercase tracking-[0.3em] text-brass">Chairside</p>
+      <h1 class="mt-3 font-display text-5xl sm:text-7xl text-white">Piercers in Chattanooga</h1>
+      <p class="mt-4 max-w-2xl text-ink-200">
+        Piercing is its own craft and it gets buried on shop pages. This is who does it locally,
+        what they specialize in, and where to find them. Looking for tattoos instead?
+        <a href="/#browse" class="text-brass hover:text-white">Browse artists by style</a>.
+      </p>
+    </section>
+
+    <!-- Piercer directory -->
+    <section id="piercers" class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+
+      <!-- Specialty filters -->
+      <div x-show="piercers.length > 0" x-cloak class="mb-8">
+        <p class="text-xs uppercase tracking-widest text-ink-500 mb-3">Specialties</p>
+        <div class="flex flex-wrap gap-2">
+          <template x-for="p in allPiercings" :key="p">
+            <button @click="toggle(p)"
+                    :class="filters.includes(p) ? 'bg-brass border-brass text-brass-ink' : 'border-ink-700 text-ink-200 hover:border-ink-500'"
+                    class="text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition"
+                    x-text="p"></button>
+          </template>
+        </div>
+        <button x-show="filters.length" @click="filters = []"
+                class="mt-3 text-xs uppercase tracking-widest text-ink-500 hover:text-brass">Clear filters</button>
+      </div>
+
+      <p x-show="!loading && piercers.length > 0" x-cloak class="text-sm text-ink-500 mb-5">
+        <span x-text="filtered.length"></span> piercer<span x-show="filtered.length !== 1">s</span> listed
+      </p>
+
+      <!-- Loading -->
+      <p x-show="loading" class="text-ink-500">Loading…</p>
+
+      <!-- Nobody listed yet -->
+      <div x-show="!loading && piercers.length === 0" x-cloak
+           class="rounded-lg border border-dashed border-ink-700 bg-ink-900/50 px-6 py-8">
+        <p class="font-display text-3xl text-white">Be the first piercer on Chairside</p>
+        <p class="mt-2 max-w-xl text-sm text-ink-200">
+          Chairside lists Chattanooga piercers by what they actually do, so someone after a
+          curated ear or a septum can find the right person instead of calling around.
+          Your profile is free and links straight to your own Instagram.
+        </p>
+        <a href="/signup.html"
+           class="mt-5 inline-block rounded-md bg-brass px-5 py-2.5 text-sm font-semibold uppercase tracking-widest text-brass-ink hover:bg-brass-dark transition">
+          Get listed free
+        </a>
+      </div>
+
+      <!-- Filtered everything out -->
+      <p x-show="!loading && piercers.length > 0 && filtered.length === 0" x-cloak class="text-ink-200">
+        No piercers match those specialties yet.
+      </p>
+
+      <!-- Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <template x-for="p in filtered" :key="p.id">
+          <article class="rounded-xl border border-ink-800 bg-ink-900 overflow-hidden">
+            <template x-if="p.photos && p.photos.length">
+              <div class="aspect-square overflow-hidden bg-ink-800">
+                <img :src="p.photos[0]" :alt="p.name + ' piercing work'" class="h-full w-full object-cover">
+              </div>
+            </template>
+            <template x-if="!p.photos || !p.photos.length">
+              <div class="aspect-[3/2] w-full flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-ink-800 to-ink-950">
+                <span class="font-display text-5xl leading-none text-brass/30" x-text="p.name.charAt(0)"></span>
+              </div>
+            </template>
+            <div class="p-5">
+              <h3 class="font-display text-2xl text-white" x-text="p.name"></h3>
+              <p class="text-xs uppercase tracking-widest text-ink-500 mt-1" x-text="p.org || p.city"></p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <template x-for="s in (p.piercings || [])" :key="s">
+                  <span class="style-pill" x-text="s"></span>
+                </template>
+              </div>
+              <p x-show="p.booking" class="mt-3 text-sm text-ink-200">
+                <span class="text-ink-500">Prefers</span> <span x-text="p.booking"></span>
+              </p>
+              <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                <template x-if="p.socials && p.socials.instagram">
+                  <a :href="p.socials.instagram" target="_blank" rel="noopener"
+                     class="text-brass hover:text-white">Instagram &rarr;</a>
+                </template>
+                <template x-if="p.website">
+                  <a :href="p.website" target="_blank" rel="noopener"
+                     class="text-brass hover:text-white">Website &rarr;</a>
+                </template>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+    </section>
+
+    <!-- Studios that pierce: real content while the directory fills up -->
+    <section class="border-t border-ink-800 py-16">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="font-display text-4xl sm:text-5xl text-white">Studios that pierce</h2>
+        <p class="mt-3 max-w-2xl text-ink-200">
+          Every Chattanooga-area studio offering piercing, including the ones that only pierce.
+        </p>
+        <p class="mt-5 text-sm text-ink-500"><span x-text="piercingShops.length"></span> studios</p>
+        <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <template x-for="s in piercingShops" :key="s.slug">
+            <a :href="'/chattanooga/shops/' + s.slug + '/'"
+               class="group block rounded-lg border border-ink-800 bg-ink-900 p-5 hover:border-brass transition">
+              <div class="flex items-baseline justify-between gap-3">
+                <p class="font-display text-2xl text-white group-hover:text-brass transition" x-text="s.name"></p>
+                <span x-show="s.services.length === 1"
+                      class="shrink-0 text-[10px] uppercase tracking-widest text-brass">Piercing only</span>
+              </div>
+              <p class="mt-2 text-sm text-ink-200"
+                 x-text="s.address + ', ' + s.city + ', ' + s.state + (s.zip ? ' ' + s.zip : '')"></p>
+            </a>
+          </template>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-ink-800 py-10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="inline-block h-2 w-2 rounded-full bg-brass"></span>
+        <span class="font-display text-xl text-white">Chairside</span>
+      </div>
+      <div class="flex items-center gap-6 text-sm text-ink-500">
+        <a href="/#browse" class="hover:text-white transition">Tattoo artists</a>
+        <a href="/chattanooga/shops/" class="hover:text-white transition">Shops</a>
+        <a href="/aftercare.html" class="hover:text-white transition">Aftercare</a>
+        <a href="/signup.html" class="hover:text-white transition">List your profile</a>
+      </div>
+      <p class="text-sm text-ink-500">
+        &copy; <span x-data x-text="new Date().getFullYear()"></span> Chairside. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function piercings() {
+      return {
+        loading: true,
+        piercers: [],
+        piercingShops: [],
+        filters: [],
+        allPiercings: [
+          'Ear Curation', 'Lobes', 'Helix', 'Daith', 'Conch', 'Tragus', 'Rook',
+          'Industrial', 'Septum', 'Nostril', 'Eyebrow', 'Navel', 'Nipple',
+          'Surface & Dermal', 'Oral', 'Stretching', 'Jewelry & Styling'
+        ],
+
+        get filtered() {
+          if (!this.filters.length) return this.piercers;
+          return this.piercers.filter(p =>
+            this.filters.every(f => (p.piercings || []).includes(f))
+          );
+        },
+
+        toggle(p) {
+          const i = this.filters.indexOf(p);
+          if (i === -1) this.filters.push(p);
+          else this.filters.splice(i, 1);
+        },
+
+        async load() {
+          try {
+            const res = await fetch('/artists.json');
+            const all = await res.json();
+            this.piercers = all.filter(a => (a.services || ['tattoo']).includes('piercing'));
+          } catch (e) {
+            console.error('Failed to load artists', e);
+            this.piercers = [];
+          } finally {
+            this.loading = false;
+          }
+          try {
+            const res = await fetch('/shops.json');
+            const shops = await res.json();
+            this.piercingShops = shops.filter(s => (s.services || []).includes('piercing'));
+          } catch (e) {
+            this.piercingShops = [];
+          }
+        }
+      };
+    }
+  </script>
+</body>
+</html>

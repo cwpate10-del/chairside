@@ -15,6 +15,12 @@ const artists = read('public/artists.json')
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
   .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 const fullAddr = (s) => [s.address, `${s.city}, ${s.state}${s.zip ? ' ' + s.zip : ''}`].join(', ')
+const svcLabel = (shop) => {
+  const sv = shop.services || ['tattoo']
+  if (sv.includes('tattoo') && sv.includes('piercing')) return 'Tattoo & Piercing'
+  if (sv.includes('piercing')) return 'Piercing only'
+  return 'Tattoo'
+}
 const artistsFor = (slug) => {
   const shop = shops.find((s) => s.slug === slug)
   return artists.filter((a) => a.org === shop.name || a.shop?.name === shop.name)
@@ -56,7 +62,8 @@ function page ({ title, description, path, body, schema }) {
           <span class="font-display text-3xl">Chairside</span>
         </a>
         <div class="hidden md:flex items-center gap-x-8 text-sm uppercase tracking-widest text-ink-200">
-          <a href="/#browse" class="hover:text-white">Browse</a>
+          <a href="/#browse" class="hover:text-white">Tattoos</a>
+          <a href="/piercings.html" class="hover:text-white">Piercings</a>
           <a href="/chattanooga/shops/" class="hover:text-white">Shops</a>
           <a href="/aftercare.html" class="hover:text-white">Aftercare</a>
           <a href="/signup.html" class="hover:text-white">For Artists</a>
@@ -85,12 +92,21 @@ function page ({ title, description, path, body, schema }) {
 `
 }
 
-const claimBanner = (shopName, isEmpty) => `
+const claimBanner = (shopName, isEmpty, shop) => {
+  const sv = (shop && shop.services) || ['tattoo']
+  const piercingOnly = sv.includes('piercing') && !sv.includes('tattoo')
+  const noun = piercingOnly ? 'piercer' : 'artist'
+  const verb = piercingOnly ? 'pierce' : 'tattoo'
+  const blurb = piercingOnly
+    ? 'Chairside lists Chattanooga piercers by what they actually do, so someone after a curated ear or a septum can find the right person instead of calling around.'
+    : 'Chairside lists Chattanooga artists by style, so clients can find the right person instead of scrolling hashtags.'
+  return `
   <div class="mt-8 rounded-lg border border-dashed border-ink-700 bg-ink-900/50 px-6 py-6">
-    <p class="font-display text-2xl text-white">${isEmpty ? `Be the first artist from ${esc(shopName)} on Chairside` : `Also tattoo at ${esc(shopName)}?`}</p>
-    <p class="mt-2 text-sm text-ink-200 max-w-xl">Chairside lists Chattanooga artists by style, so clients can find the right person instead of scrolling hashtags. Your profile is free and links straight to your own Instagram.</p>
+    <p class="font-display text-2xl text-white">${isEmpty ? `Be the first ${noun} from ${esc(shopName)} on Chairside` : `Also ${verb} at ${esc(shopName)}?`}</p>
+    <p class="mt-2 text-sm text-ink-200 max-w-xl">${blurb} Your profile is free and links straight to your own Instagram.</p>
     <a href="/signup.html" class="mt-4 inline-block rounded-md bg-brass px-5 py-2.5 text-sm font-semibold uppercase tracking-widest text-brass-ink hover:bg-brass-dark transition">Get listed free</a>
   </div>`
+}
 
 // ---- individual shop pages -------------------------------------------------
 const written = []
@@ -110,11 +126,11 @@ for (const shop of shops) {
   ].filter(Boolean).join('<span class="text-ink-700">&middot;</span>')
 
   const rosterHtml = roster.length
-    ? `<h2 class="mt-12 text-xs uppercase tracking-widest text-ink-500">Artists at this shop</h2>
+    ? `<h2 class="mt-12 text-xs uppercase tracking-widest text-ink-500">${(shop.services || ['tattoo']).includes('tattoo') ? 'Artists at this shop' : 'Piercers at this studio'}</h2>
        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">` + roster.map((a) => `
         <div class="rounded-lg border border-ink-800 bg-ink-900 p-5">
           <p class="font-display text-2xl text-white">${esc(a.name)}</p>
-          <div class="mt-2 flex flex-wrap gap-2">${a.styles.map((s) => `<span class="style-pill">${esc(s)}</span>`).join('')}</div>
+          <div class="mt-2 flex flex-wrap gap-2">${[...(a.styles || []), ...(a.piercings || [])].map((s) => `<span class="style-pill">${esc(s)}</span>`).join('')}</div>
           ${a.socials?.instagram ? `<a href="${esc(a.socials.instagram)}" target="_blank" rel="noopener" class="mt-3 inline-block text-sm text-brass hover:text-white">Instagram &rarr;</a>` : ''}
         </div>`).join('') + `</div>`
     : ''  // nothing to say; the claim banner below carries it
@@ -127,9 +143,10 @@ for (const shop of shops) {
     </nav>
     <h1 class="mt-4 font-display text-5xl sm:text-6xl text-white">${esc(shop.name)}</h1>
     <p class="mt-3 text-ink-200">${esc(fullAddr(shop))}</p>
+    <p class="mt-1 text-xs uppercase tracking-widest text-brass">${svcLabel(shop)}</p>
     ${detail ? `<div class="mt-4 flex flex-wrap items-center gap-4 text-sm">${detail}</div>` : ''}
     ${rosterHtml}
-    ${claimBanner(shop.name, roster.length === 0)}
+    ${claimBanner(shop.name, roster.length === 0, shop)}
   </section>`
 
   const schema = {
@@ -205,6 +222,7 @@ const urls = [
   { loc: '/', pri: '1.0', freq: 'weekly' },
   { loc: '/chattanooga/shops/', pri: '0.9', freq: 'weekly' },
   ...shops.map((s) => ({ loc: `/chattanooga/shops/${s.slug}/`, pri: '0.8', freq: 'monthly' })),
+  { loc: '/piercings.html', pri: '0.9', freq: 'weekly' },
   { loc: '/aftercare.html', pri: '0.7', freq: 'monthly' },
   { loc: '/signup.html', pri: '0.6', freq: 'monthly' },
 ]
