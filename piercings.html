@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Piercers in Chattanooga | Chairside</title>
-  <meta name="description" content="Find a piercer in Chattanooga by what they specialize in, plus how long every piercing takes to heal. Ear curation, septum, navel, dermals and more.">
-  <meta name="keywords" content="piercer chattanooga, ear curation chattanooga, body piercing chattanooga, piercing healing time, how long does a daith take to heal">
+  <meta name="description" content="Find a piercer in Chattanooga by what they specialize in. Ear curation, septum, nostril, navel, dermals and more.">
+  <meta name="keywords" content="piercer chattanooga, ear curation chattanooga, body piercing chattanooga, septum piercing, piercing studio">
   <meta name="theme-color" content="#0a0a0a">
   <link rel="canonical" href="https://chairside.ink/piercings.html">
 
   <meta property="og:title" content="Piercers in Chattanooga | Chairside">
-  <meta property="og:description" content="Find a piercer in Chattanooga, and how long every piercing takes to heal.">
+  <meta property="og:description" content="Find a piercer in Chattanooga by what they specialize in.">
   <meta property="og:url" content="https://chairside.ink/piercings.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Chairside">
@@ -163,39 +163,6 @@
       </div>
     </section>
 
-    <!-- Healing times: useful to someone not ready to book yet, and it is
-         what people actually search for -->
-    <section class="border-t border-ink-800 py-16 sm:py-20">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-xs uppercase tracking-[0.3em] text-brass">Before you book</p>
-        <h2 class="mt-3 font-display text-4xl sm:text-6xl text-white">How long each one takes to heal</h2>
-        <p class="mt-4 max-w-2xl text-ink-200">
-          Cartilage takes months, not weeks, and a piercing can look healed on the outside long
-          before it is. These are typical ranges. Your piercer's word beats any chart, including this one.
-        </p>
-
-        <template x-for="group in healing" :key="group.region">
-          <div class="mt-10">
-            <h3 class="text-xs uppercase tracking-widest text-ink-500 border-b border-ink-800 pb-2" x-text="group.region"></h3>
-            <div class="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <template x-for="item in group.items" :key="item.name">
-                <div class="rounded-lg border border-ink-800 bg-ink-900 p-4">
-                  <p class="font-display text-2xl text-white leading-tight" x-text="item.name"></p>
-                  <p class="mt-2 text-sm text-brass" x-text="item.time"></p>
-                  <p class="mt-1 text-xs text-ink-500" x-text="item.note"></p>
-                </div>
-              </template>
-            </div>
-          </div>
-        </template>
-
-        <p class="mt-10 text-sm text-ink-500 max-w-2xl">
-          Healing well is mostly aftercare. We keep a
-          <a href="/aftercare.html" class="text-brass hover:text-white">full aftercare guide</a> for that.
-        </p>
-      </div>
-    </section>
-
   </main>
 
   <footer class="border-t border-ink-800 py-10">
@@ -222,30 +189,6 @@
         loading: true,
         piercers: [],
         filters: [],
-        healing: [
-          { region: 'Ear', items: [
-            { name: 'Lobe',          time: '6 to 8 weeks',   note: 'Soft tissue, the quickest of all' },
-            { name: 'Helix',         time: '6 to 12 months', note: 'Cartilage, outer rim' },
-            { name: 'Daith',         time: '6 to 9 months',  note: 'Inner fold above the canal' },
-            { name: 'Conch',         time: '6 to 9 months',  note: 'The flat bowl of the ear' },
-            { name: 'Tragus',        time: '6 to 12 months', note: 'The flap over the canal' },
-            { name: 'Rook',          time: '6 to 12 months', note: 'Thick inner ridge' },
-            { name: 'Industrial',    time: '6 to 12 months', note: 'Two holes, one bar' },
-            { name: 'Forward Helix', time: '6 to 12 months', note: 'Front of the rim' }
-          ]},
-          { region: 'Face', items: [
-            { name: 'Septum',  time: '6 to 8 weeks',  note: 'Through the soft spot, not the cartilage' },
-            { name: 'Nostril', time: '4 to 6 months', note: 'Slower than it looks' },
-            { name: 'Eyebrow', time: '2 to 3 months', note: 'Surface piercing, migrates easily' },
-            { name: 'Tongue',  time: '4 to 6 weeks',  note: 'Fast, but swells hard at first' }
-          ]},
-          { region: 'Body', items: [
-            { name: 'Navel',           time: '6 to 9 months',  note: 'Caught by waistbands constantly' },
-            { name: 'Nipple',          time: '6 to 12 months', note: 'Often longer than quoted' },
-            { name: 'Lip / Labret',    time: '2 to 3 months',  note: 'Watch the jewelry on your teeth' },
-            { name: 'Dermal / Surface',time: '1 to 3 months',  note: 'Anchored, needs the most care' }
-          ]}
-        ],
         allPiercings: [
           'Ear Curation', 'Lobes', 'Helix', 'Daith', 'Conch', 'Tragus', 'Rook',
           'Industrial', 'Septum', 'Nostril', 'Eyebrow', 'Navel', 'Nipple',
