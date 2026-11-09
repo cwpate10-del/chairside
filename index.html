@@ -466,11 +466,12 @@
                   <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Shop</p>
                   <p class="text-white font-semibold" x-text="selected.shop.name"></p>
                   <p class="text-sm text-ink-200 mt-1" x-text="selected.shop.address"></p>
-                  <a :href="selected.shop.url" target="_blank" rel="noopener"
+                  <a x-show="selected.shop.url" :href="selected.shop.url" target="_blank" rel="noopener"
                      class="mt-3 inline-block text-sm text-brass hover:text-white">Visit shop →</a>
                 </div>
                 <div>
-                  <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Follow</p>
+                  <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Book with them</p>
+                  <div class="flex flex-col gap-2 items-start">
                   <template x-if="selected.socials.instagram">
                     <a :href="selected.socials.instagram" target="_blank" rel="noopener"
                        class="inline-flex items-center gap-2 text-white hover:text-brass">
@@ -480,6 +481,20 @@
                       <span>Instagram</span>
                     </a>
                   </template>
+                  <template x-if="selected.website">
+                    <a :href="selected.website" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 text-white hover:text-brass">
+                      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18" stroke-linecap="round"/>
+                      </svg>
+                      <span>Website</span>
+                    </a>
+                  </template>
+                  </div>
+                  <p x-show="selected.booking" class="mt-3 text-sm text-ink-200">
+                    <span class="text-ink-500">Prefers</span> <span x-text="selected.booking"></span>
+                  </p>
                 </div>
               </div>
 
