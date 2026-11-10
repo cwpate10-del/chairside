@@ -96,7 +96,7 @@
               @submit="if (oversize) { $event.preventDefault(); return; } submitting = true"
               class="space-y-10">
 
-          <input type="hidden" name="_subject" :value="isFeatured ? 'FEATURED signup — Chairside' : 'New Chairside artist submission'">
+          <input type="hidden" name="_subject" value="New Chairside artist submission" :value="isFeatured ? 'FEATURED signup — Chairside' : 'New Chairside artist submission'">
           <!-- Receipt to the artist: if this never arrives, they know the
                submission failed instead of both sides assuming it worked. -->
           <input type="hidden" name="_autoresponse" value="Thanks for sending your details to Chairside. Your page is next on my list and I'll come back to you within 48 hours, usually sooner. If you don't hear anything by then, just reply to this email and I'll sort it out. Charlie, Chairside">
@@ -106,7 +106,7 @@
           <input type="hidden" name="_template" value="table">
           <!-- Featured goes straight on to Stripe once we have their details,
                so an abandoned checkout still leaves us a lead. -->
-          <input type="hidden" name="_next" :value="nextUrl">
+          <input type="hidden" name="_next" value="https://chairside.ink/signup.html?submitted=1" :value="nextUrl">
           <input type="text" name="_honey" style="display:none">
 
           <div>
