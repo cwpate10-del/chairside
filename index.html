@@ -229,8 +229,9 @@
               <select x-model="filters.gender"
                       class="rounded-md border border-ink-700 bg-ink-900 px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brass">
                 <option value="">Any</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
+                <option value="woman">Woman</option>
+                <option value="man">Man</option>
+                <option value="non-binary">Non-binary</option>
               </select>
             </label>
             <button @click="filters.styles=[]; filters.gender=''; showSavedOnly=false"
@@ -425,7 +426,7 @@
                 </div>
 
                 <!-- Availability + Pricing -->
-                <div class="mt-5 grid grid-cols-2 gap-4">
+                <div class="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-4">
                   <div x-show="selected.availability">
                     <p class="text-[10px] uppercase tracking-widest text-ink-500">Booking</p>
                     <span :class="availabilityClass(selected.availability)"
@@ -435,6 +436,11 @@
                   <div x-show="selected.pricing">
                     <p class="text-[10px] uppercase tracking-widest text-ink-500">Rate</p>
                     <p class="mt-1 text-sm text-white" x-text="selected.pricing"></p>
+                  </div>
+                  <div x-show="selected.experience">
+                    <p class="text-[10px] uppercase tracking-widest text-ink-500">Experience</p>
+                    <p class="mt-1 text-sm text-white"
+                       x-text="selected.experience + (String(selected.experience) === '1' ? ' year' : ' years')"></p>
                   </div>
                 </div>
 

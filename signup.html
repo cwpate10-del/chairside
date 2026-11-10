@@ -196,6 +196,30 @@
                    class="signup-input">
           </div>
 
+          <div>
+            <label class="block">
+              <span class="text-sm font-medium text-white">Years of experience <span class="text-ink-500">(optional)</span></span>
+            </label>
+            <input type="number" name="experience" min="0" max="70" inputmode="numeric" placeholder="10"
+                   class="signup-input">
+          </div>
+
+          <div>
+            <label class="block">
+              <span class="text-sm font-medium text-white">Gender <span class="text-ink-500">(optional)</span></span>
+            </label>
+            <select name="gender" class="signup-input">
+              <option value="">Prefer not to say</option>
+              <option value="woman">Woman</option>
+              <option value="man">Man</option>
+              <option value="non-binary">Non-binary</option>
+              <option value="other">Another identity</option>
+            </select>
+            <p class="mt-2 text-xs text-ink-500">
+              Some clients search for an artist they'll feel comfortable with. Leave it blank and you simply won't show up under that filter.
+            </p>
+          </div>
+
           <div x-show="doesTattoo">
             <label class="block">
               <span class="text-sm font-medium text-white">Tattoo styles you specialize in</span>

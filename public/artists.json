@@ -32,7 +32,8 @@
     "services": [
       "tattoo"
     ],
-    "piercings": []
+    "piercings": [],
+    "experience": ""
   },
   {
     "id": "sarah-hopper",
@@ -75,6 +76,7 @@
       "instagram": "https://www.instagram.com/shoppertattoo/"
     },
     "website": "https://shoppertattoo.com/",
-    "booking": "Email or the booking form on her site"
+    "booking": "Email or the booking form on her site",
+    "experience": "10"
   }
 ]
