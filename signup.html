@@ -55,11 +55,12 @@
     <div class="absolute inset-0 bg-gradient-to-br from-ink-950 via-ink-950/95 to-ink-950/70" aria-hidden="true"></div>
 
     <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-      <div class="signup-form-wrap grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 max-w-6xl mx-auto">
+      <div class="signup-form-wrap grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 max-w-6xl mx-auto"
+           x-data="signupForm()">
 
         <!-- Left: pitch + what happens next -->
         <div class="lg:sticky lg:top-8 lg:self-start">
-          <p class="text-xs uppercase tracking-[0.3em] text-brass">Chairside · Basic Listing</p>
+          <p class="text-xs uppercase tracking-[0.3em] text-brass">Chairside · <span x-text="isFeatured ? 'Featured Listing' : 'Basic Listing'">Basic Listing</span></p>
           <h1 class="mt-4 font-display text-6xl sm:text-7xl text-white leading-[0.95]">
             Let's build<br/>your profile.
           </h1>
@@ -84,8 +85,7 @@
 
           <p class="mt-14 text-xs text-ink-500 max-w-sm leading-relaxed">
             Free forever, no card. Want <span class="text-ink-200">Featured</span> ($29/mo, top of city search, first month free)?
-            <a href="mailto:hello@chairside.ink?subject=Chairside%20Featured%20trial"
-               class="text-brass hover:text-white underline underline-offset-4 decoration-brass hover:decoration-white transition">Email us instead</a>.
+            Choose it at the top of the form and you'll go to payment once your details are in.
           </p>
         </div>
 
@@ -93,18 +93,39 @@
         <form action="https://formsubmit.co/patecwp06@gmail.com"
               method="POST"
               enctype="multipart/form-data"
-              x-data="signupForm()"
               @submit="if (oversize) { $event.preventDefault(); return; } submitting = true"
               class="space-y-10">
 
-          <input type="hidden" name="_subject" value="New Chairside artist submission">
+          <input type="hidden" name="_subject" :value="isFeatured ? 'FEATURED signup — Chairside' : 'New Chairside artist submission'">
           <!-- Receipt to the artist: if this never arrives, they know the
                submission failed instead of both sides assuming it worked. -->
           <input type="hidden" name="_autoresponse" value="Thanks for sending your details to Chairside. Your page is next on my list and I'll come back to you within 48 hours, usually sooner. If you don't hear anything by then, just reply to this email and I'll sort it out. Charlie, Chairside">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://chairside.ink/signup.html?submitted=1">
+          <!-- Featured goes straight on to Stripe once we have their details,
+               so an abandoned checkout still leaves us a lead. -->
+          <input type="hidden" name="_next" :value="nextUrl">
           <input type="text" name="_honey" style="display:none">
+
+          <div>
+            <label class="block">
+              <span class="text-sm font-medium text-white">Listing</span>
+            </label>
+            <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label :class="plan === 'basic' ? 'border-brass bg-ink-800' : 'border-ink-700 hover:border-ink-500'"
+                     class="cursor-pointer rounded-lg border px-4 py-3 transition block">
+                <input type="radio" name="plan" value="basic" x-model="plan" class="sr-only">
+                <span class="block text-sm font-medium text-white">Basic</span>
+                <span class="block text-xs text-ink-500 mt-0.5">Free. Your profile, styles and contact.</span>
+              </label>
+              <label :class="plan === 'featured' ? 'border-brass bg-ink-800' : 'border-ink-700 hover:border-ink-500'"
+                     class="cursor-pointer rounded-lg border px-4 py-3 transition block">
+                <input type="radio" name="plan" value="featured" x-model="plan" class="sr-only">
+                <span class="block text-sm font-medium text-white">Featured <span class="text-brass">$29/mo</span></span>
+                <span class="block text-xs text-ink-500 mt-0.5">Top of search in your city, plus the extras.</span>
+              </label>
+            </div>
+          </div>
 
           <div>
             <label class="block">
@@ -118,7 +139,7 @@
             <label class="block">
               <span class="text-sm font-medium text-white">Email</span>
             </label>
-            <input type="email" name="email" required autocomplete="email"
+            <input type="email" name="email" required autocomplete="email" x-model="email"
                    class="signup-input">
           </div>
 
@@ -260,11 +281,13 @@
 
           <div class="pt-4 flex items-baseline justify-between gap-6 flex-wrap">
             <p class="text-xs text-ink-500 max-w-[15rem]">
-              We'll email you once your page is ready.
+              <span x-show="!isFeatured">We'll email you once your page is ready.</span>
+              <span x-show="isFeatured" x-cloak>Your details come to us first, then Stripe handles payment. You can still back out there.</span>
             </p>
             <button type="submit" :disabled="submitting || oversize || processing"
                     class="group inline-flex items-baseline gap-2 text-lg text-white hover:text-brass transition disabled:opacity-50">
-              <span x-show="!submitting" class="border-b border-white group-hover:border-brass pb-1 transition">Send it</span>
+              <span x-show="!submitting && !isFeatured" class="border-b border-white group-hover:border-brass pb-1 transition">Send it</span>
+              <span x-show="!submitting && isFeatured" x-cloak class="border-b border-white group-hover:border-brass pb-1 transition">Continue to payment</span>
               <span x-show="submitting" x-cloak class="border-b border-ink-500 pb-1">Sending…</span>
               <span aria-hidden="true" class="text-brass group-hover:translate-x-1 transition">→</span>
             </button>
@@ -321,6 +344,24 @@
         files: [],
         oversize: false,
         tooMany: false,
+        plan: 'basic',
+        email: '',
+
+        init() {
+          if (new URLSearchParams(location.search).get('plan') === 'featured') {
+            this.plan = 'featured';
+          }
+        },
+
+        get isFeatured() { return this.plan === 'featured'; },
+
+        get nextUrl() {
+          if (!this.isFeatured) return 'https://chairside.ink/signup.html?submitted=1';
+          const link = 'https://buy.stripe.com/fZu5kF6Lj7iQaJz3mycMM00';
+          return this.email
+            ? link + '?prefilled_email=' + encodeURIComponent(this.email)
+            : link;
+        },
         service: 'tattoo',
 
         get doesTattoo() { return this.service === 'tattoo' || this.service === 'both'; },
