@@ -7,7 +7,8 @@
     "org": "Main Line Tattoo",
     "styles": [
       "Watercolor",
-      "Illustrative"
+      "Illustrative",
+      "Pop Culture"
     ],
     "gender": "",
     "featured": false,
@@ -40,10 +41,12 @@
     "state": "TN",
     "org": "The Wolf and Witch Tattoo",
     "styles": [
+      "Large Scale",
       "Black & Grey",
       "Realism",
       "Color",
-      "Illustrative"
+      "Illustrative",
+      "Pop Culture"
     ],
     "gender": "",
     "featured": false,
@@ -51,7 +54,14 @@
     "pricing": "",
     "bio": "Hi I’m Sarah! I moved to Chattanooga in 2025 from Cincinnati, OH. I’ve been tattooing for 10 years.",
     "avatar": "",
-    "photos": [],
+    "photos": [
+      "/images/artists/sarah-hopper-1.jpg",
+      "/images/artists/sarah-hopper-2.jpg",
+      "/images/artists/sarah-hopper-3.jpg",
+      "/images/artists/sarah-hopper-4.jpg",
+      "/images/artists/sarah-hopper-5.jpg",
+      "/images/artists/sarah-hopper-6.jpg"
+    ],
     "services": [
       "tattoo"
     ],
