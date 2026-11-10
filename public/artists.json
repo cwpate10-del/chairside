@@ -32,5 +32,39 @@
       "tattoo"
     ],
     "piercings": []
+  },
+  {
+    "id": "sarah-hopper",
+    "name": "Sarah Hopper",
+    "city": "Chattanooga",
+    "state": "TN",
+    "org": "The Wolf and Witch Tattoo",
+    "styles": [
+      "Black & Grey",
+      "Realism",
+      "Color",
+      "Illustrative"
+    ],
+    "gender": "",
+    "featured": false,
+    "availability": "Booking 7 days a week",
+    "pricing": "",
+    "bio": "Hi I’m Sarah! I moved to Chattanooga in 2025 from Cincinnati, OH. I’ve been tattooing for 10 years.",
+    "avatar": "",
+    "photos": [],
+    "services": [
+      "tattoo"
+    ],
+    "piercings": [],
+    "shop": {
+      "name": "The Wolf and Witch Tattoo",
+      "address": "124 E 10th St Ste 1, Chattanooga, TN 37402",
+      "url": "https://thewolfandwitchtattoo.com/"
+    },
+    "socials": {
+      "instagram": "https://www.instagram.com/shoppertattoo/"
+    },
+    "website": "https://shoppertattoo.com/",
+    "booking": "Email or the booking form on her site"
   }
 ]
