@@ -101,6 +101,8 @@
                submission failed instead of both sides assuming it worked. -->
           <input type="hidden" name="_autoresponse" value="Thanks for sending your details to Chairside. Your page is next on my list and I'll come back to you within 48 hours, usually sooner. If you don't hear anything by then, just reply to this email and I'll sort it out. Charlie, Chairside">
           <input type="hidden" name="_captcha" value="false">
+          <!-- Backup inbox: if one account ever filters a submission, the other should still have it. -->
+          <input type="hidden" name="_cc" value="cwpate10@gmail.com">
           <input type="hidden" name="_template" value="table">
           <!-- Featured goes straight on to Stripe once we have their details,
                so an abandoned checkout still leaves us a lead. -->
