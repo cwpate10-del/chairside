@@ -93,7 +93,7 @@
         <form action="https://formsubmit.co/patecwp06@gmail.com"
               method="POST"
               enctype="multipart/form-data"
-              @submit="if (oversize) { $event.preventDefault(); return; } submitting = true"
+              @submit.prevent="send($event)"
               class="space-y-10">
 
           <input type="hidden" name="_subject" value="New Chairside artist submission" :value="isFeatured ? 'FEATURED signup — Chairside' : 'New Chairside artist submission'">
@@ -281,6 +281,16 @@
                       class="signup-input signup-textarea"></textarea>
           </div>
 
+          <div x-show="error" x-cloak class="rounded-lg border border-red-900 bg-red-950/40 px-5 py-4">
+            <p class="text-sm font-medium text-white">That didn't send.</p>
+            <p class="mt-1 text-xs text-red-200" x-text="error"></p>
+            <p class="mt-2 text-xs text-ink-200">
+              <button type="button" @click="sendTheOldWay()" class="text-brass hover:text-white underline underline-offset-4">Try sending it again</button>,
+              or <a :href="mailtoFallback" class="text-brass hover:text-white underline underline-offset-4">email it to us</a>
+              and we'll add you by hand.
+            </p>
+          </div>
+
           <div class="pt-4 flex items-baseline justify-between gap-6 flex-wrap">
             <p class="text-xs text-ink-500 max-w-[15rem]">
               <span x-show="!isFeatured">We'll email you once your page is ready.</span>
@@ -355,7 +365,54 @@
           }
         },
 
+        error: '',
+        formEl: null,
+
+        // form.submit() does not fire a submit event, so this bypasses the
+        // fetch handler entirely and does the classic POST that has always worked.
+        sendTheOldWay() {
+          if (this.formEl) { this.submitting = true; this.formEl.submit(); }
+        },
+
         get isFeatured() { return this.plan === 'featured'; },
+
+        get mailtoFallback() {
+          const body = 'My Chairside submission did not go through. Details:\n\n'
+            + 'Name: \nEmail: ' + (this.email || '') + '\nInstagram: \nShop: \nStyles: \n';
+          return 'mailto:hello@chairside.ink?subject=' + encodeURIComponent('Chairside signup (form failed)')
+            + '&body=' + encodeURIComponent(body);
+        },
+
+        // Posting through fetch keeps the artist on chairside.ink, so a failure
+        // shows up here instead of dumping them on a FormSubmit error page.
+        async send(e) {
+          if (this.oversize || this.processing || this.submitting) return;
+          this.error = '';
+          this.submitting = true;
+          this.formEl = e.target;
+          const fd = new FormData(e.target);
+          fd.delete('_next');            // no redirect when posting over fetch
+          try {
+            const res = await fetch('https://formsubmit.co/ajax/patecwp06@gmail.com', {
+              method: 'POST',
+              body: fd,
+              headers: { 'Accept': 'application/json' }
+            });
+            let data = null;
+            try { data = await res.json(); } catch (err) { data = null; }
+            const ok = res.ok && data && String(data.success) === 'true';
+            if (!ok) {
+              throw new Error((data && data.message) || ('The form service returned ' + res.status + '.'));
+            }
+            if (this.isFeatured) { window.location.href = this.nextUrl; return; }
+            document.documentElement.classList.add('is-submitted');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } catch (err) {
+            this.error = (err && err.message) || 'We could not reach the form service.';
+          } finally {
+            this.submitting = false;
+          }
+        },
 
         get nextUrl() {
           if (!this.isFeatured) return 'https://chairside.ink/signup.html?submitted=1';
