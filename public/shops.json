@@ -329,5 +329,20 @@
     "services": [
       "piercing"
     ]
+  },
+  {
+    "slug": "midnight-curiosity",
+    "name": "Midnight Curiosity Tattoo & Art Lounge",
+    "address": "655 Walnut St Ste 301",
+    "city": "Chattanooga",
+    "state": "TN",
+    "zip": "37402",
+    "url": "",
+    "phone": "(423) 602-5233",
+    "instagram": "",
+    "services": [
+      "tattoo",
+      "piercing"
+    ]
   }
 ]

@@ -84,5 +84,40 @@
     "website": "https://shoppertattoo.com/",
     "booking": "Email or the booking form on her site",
     "experience": "10"
+  },
+  {
+    "id": "zane",
+    "name": "Zane",
+    "city": "Chattanooga",
+    "state": "TN",
+    "org": "Midnight Curiosity Tattoo & Art Lounge",
+    "styles": [
+      "Black & Grey",
+      "Realism",
+      "Traditional",
+      "Gothic"
+    ],
+    "gender": "man",
+    "featured": false,
+    "availability": "",
+    "pricing": "$100 minimum",
+    "experience": "5",
+    "bio": "My name is Zane! Owner/ artist of Midnight Curiosity. I’m looking to do more black and grey work along with any American Traditional. I offer discounted designs I’m wanting to do! $100 minimum",
+    "avatar": "",
+    "photos": [],
+    "services": [
+      "tattoo"
+    ],
+    "piercings": [],
+    "shop": {
+      "name": "Midnight Curiosity Tattoo & Art Lounge",
+      "address": "655 Walnut St Ste 301, Chattanooga, TN 37402",
+      "url": ""
+    },
+    "socials": {
+      "instagram": "https://www.instagram.com/ztattoosu/"
+    },
+    "website": "https://thank-you-zane.square.site/",
+    "booking": "Instagram DM or the booking site"
   }
 ]
