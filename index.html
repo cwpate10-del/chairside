@@ -376,7 +376,9 @@
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100">
       <div class="fixed inset-0 bg-black/80" @click="closeArtist()"></div>
-      <div class="relative min-h-full flex items-start justify-center p-4 sm:p-8">
+      <!-- this wrapper paints over the backdrop, so the dismiss click has to live here -->
+      <div class="relative min-h-full flex items-start justify-center p-4 sm:p-8"
+           @click.self="closeArtist()">
         <div class="relative w-full max-w-3xl rounded-xl border border-ink-800 bg-ink-900 overflow-hidden"
              @click.stop>
           <template x-if="selected">
@@ -736,6 +738,7 @@
           if (!this.filters.city) return [];
           const cityLc = this.filters.city.toLowerCase();
           return this.artists.filter(a => {
+            if (!(a.services || ['tattoo']).includes('tattoo')) return false;
             const aCity = a.city.toLowerCase();
             if (aCity !== cityLc && !aCity.includes(cityLc) && !cityLc.includes(aCity)) return false;
             if (this.filters.styles.length && !this.filters.styles.some(s => a.styles.includes(s))) return false;
@@ -751,6 +754,7 @@
           if (!this.filters.city) return false;
           const cityLc = this.filters.city.toLowerCase();
           return !this.artists.some(a => {
+            if (!(a.services || ['tattoo']).includes('tattoo')) return false;
             const aCity = a.city.toLowerCase();
             return aCity === cityLc || aCity.includes(cityLc) || cityLc.includes(aCity);
           });

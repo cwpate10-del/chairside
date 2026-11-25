@@ -119,5 +119,52 @@
     },
     "website": "https://thank-you-zane.square.site/",
     "booking": "Instagram DM or the booking site"
+  },
+  {
+    "id": "abigail-combs",
+    "name": "Abigail Combs",
+    "city": "Chattanooga",
+    "state": "TN",
+    "org": "Southern Soul Tattoo & Piercing Studio",
+    "styles": [],
+    "gender": "woman",
+    "featured": false,
+    "availability": "",
+    "pricing": "",
+    "bio": "Piercing apprentice at Southern Soul Tattoo & Piercing in Chattanooga TN 🩷 Always down to do piercings, but I don't pierce anything below the navel.",
+    "avatar": "",
+    "photos": [
+      "/images/artists/abigail-combs-1.jpg",
+      "/images/artists/abigail-combs-2.jpg",
+      "/images/artists/abigail-combs-3.jpg",
+      "/images/artists/abigail-combs-4.jpg",
+      "/images/artists/abigail-combs-5.jpg",
+      "/images/artists/abigail-combs-6.jpg"
+    ],
+    "services": [
+      "piercing"
+    ],
+    "piercings": [
+      "Lobes (1-4)",
+      "Stacked Lobes",
+      "Conch",
+      "Helix",
+      "Forward Helix",
+      "Flat",
+      "Nostril",
+      "Nipple",
+      "Navel"
+    ],
+    "shop": {
+      "name": "Southern Soul Tattoo & Piercing Studio",
+      "address": "739 Ashland Terrace Unit 105, Chattanooga, TN",
+      "url": ""
+    },
+    "socials": {
+      "instagram": ""
+    },
+    "website": "https://www.facebook.com/share/1EqmJB6Yba/",
+    "booking": "Instagram, Facebook or WhatsApp DM",
+    "experience": ""
   }
 ]

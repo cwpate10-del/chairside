@@ -412,8 +412,14 @@
         async send(e) {
           if (this.oversize || this.processing || this.submitting) return;
           this.error = '';
-          this.submitting = true;
           this.formEl = e.target;
+
+          // FormSubmit's /ajax endpoint accepts a multipart body, answers
+          // success: true, and throws the files away. Photos only survive the
+          // native POST, so anyone who attached one goes that route instead.
+          if (this.files.length) { this.sendTheOldWay(); return; }
+
+          this.submitting = true;
           const fd = new FormData(e.target);
           fd.delete('_next');            // no redirect when posting over fetch
           try {

@@ -105,43 +105,150 @@
       <!-- Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <template x-for="p in piercers" :key="p.id">
-          <article class="rounded-xl border border-ink-800 bg-ink-900 overflow-hidden">
-            <template x-if="p.photos && p.photos.length">
-              <div class="aspect-square overflow-hidden bg-ink-800">
-                <img :src="p.photos[0]" :alt="p.name + ' piercing work'" class="h-full w-full object-cover">
+          <article class="group relative rounded-xl border border-ink-800 bg-ink-900 overflow-hidden hover:border-brass hover:shadow-2xl hover:shadow-brass/20 transition duration-300">
+            <button @click="openPiercer(p)" class="text-left w-full">
+              <template x-if="p.photos && p.photos.length">
+                <div class="relative aspect-square overflow-hidden bg-ink-800">
+                  <img :src="p.photos[0]" :alt="p.name + ' piercing work'"
+                       class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                  <span x-show="p.photos.length > 1" x-cloak
+                        class="absolute bottom-3 right-3 rounded-full bg-ink-950/75 px-2.5 py-1 text-[11px] text-white backdrop-blur-sm"
+                        x-text="p.photos.length + ' photos'"></span>
+                </div>
+              </template>
+              <template x-if="!p.photos || !p.photos.length">
+                <div class="aspect-[3/2] w-full flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-ink-800 to-ink-950">
+                  <span class="font-display text-5xl leading-none text-brass/30" x-text="p.name.charAt(0)"></span>
+                </div>
+              </template>
+              <div class="p-5">
+                <h3 class="font-display text-2xl text-white" x-text="p.name"></h3>
+                <p class="text-xs uppercase tracking-widest text-ink-500 mt-1" x-text="p.org || p.city"></p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <template x-for="s in (p.piercings || []).slice(0, 4)" :key="s">
+                    <span class="style-pill" x-text="s"></span>
+                  </template>
+                  <span x-show="(p.piercings || []).length > 4" x-cloak
+                        class="style-pill" x-text="'+' + ((p.piercings || []).length - 4)"></span>
+                </div>
               </div>
-            </template>
-            <template x-if="!p.photos || !p.photos.length">
-              <div class="aspect-[3/2] w-full flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-ink-800 to-ink-950">
-                <span class="font-display text-5xl leading-none text-brass/30" x-text="p.name.charAt(0)"></span>
-              </div>
-            </template>
-            <div class="p-5">
-              <h3 class="font-display text-2xl text-white" x-text="p.name"></h3>
-              <p class="text-xs uppercase tracking-widest text-ink-500 mt-1" x-text="p.org || p.city"></p>
-              <div class="mt-3 flex flex-wrap gap-2">
-                <template x-for="s in (p.piercings || [])" :key="s">
-                  <span class="style-pill" x-text="s"></span>
-                </template>
-              </div>
-              <p x-show="p.booking" class="mt-3 text-sm text-ink-200">
-                <span class="text-ink-500">Prefers</span> <span x-text="p.booking"></span>
-              </p>
-              <div class="mt-4 flex flex-wrap gap-4 text-sm">
-                <template x-if="p.socials && p.socials.instagram">
-                  <a :href="p.socials.instagram" target="_blank" rel="noopener"
-                     class="text-brass hover:text-white">Instagram &rarr;</a>
-                </template>
-                <template x-if="p.website">
-                  <a :href="p.website" target="_blank" rel="noopener"
-                     class="text-brass hover:text-white">Website &rarr;</a>
-                </template>
-              </div>
-            </div>
+            </button>
           </article>
         </template>
       </div>
     </section>
+
+    <!-- Detail view: same drawer pattern as the tattoo artist grid -->
+    <div x-show="selected" x-cloak
+         @keydown.escape.window="closePiercer()"
+         role="dialog" aria-modal="true" aria-label="Piercer details"
+         class="fixed inset-0 z-50 overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100">
+      <div class="fixed inset-0 bg-black/80" @click="closePiercer()"></div>
+      <!-- this wrapper paints over the backdrop, so the dismiss click has to live here -->
+      <div class="relative min-h-full flex items-start justify-center p-4 sm:p-8"
+           @click.self="closePiercer()">
+        <div class="relative w-full max-w-3xl rounded-xl border border-ink-800 bg-ink-900 overflow-hidden"
+             @click.stop>
+          <template x-if="selected">
+            <div>
+              <button @click="closePiercer()"
+                      class="group/close absolute top-4 right-4 z-10 h-9 w-9 rounded-full bg-ink-800 hover:bg-brass flex items-center justify-center"
+                      aria-label="Close">
+                <svg class="h-4 w-4 text-white group-hover/close:text-brass-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/>
+                </svg>
+              </button>
+
+              <!-- Header -->
+              <div class="p-6 sm:p-8 border-b border-ink-800">
+                <div class="flex items-start gap-4">
+                  <template x-if="selected.avatar">
+                    <img :src="selected.avatar" :alt="selected.name"
+                         class="h-16 w-16 rounded-full object-cover border border-ink-700">
+                  </template>
+                  <template x-if="!selected.avatar">
+                    <div class="h-16 w-16 rounded-full bg-ink-800 flex items-center justify-center border border-ink-700">
+                      <span class="font-display text-3xl leading-none text-brass/50" x-text="selected.name.charAt(0)"></span>
+                    </div>
+                  </template>
+                  <div class="pr-10">
+                    <h2 class="font-display text-4xl text-white" x-text="selected.name"></h2>
+                    <p class="text-xs uppercase tracking-widest text-ink-500 mt-1">
+                      <span x-text="selected.city"></span>, <span x-text="selected.state"></span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-5 flex flex-wrap gap-2">
+                  <template x-for="s in (selected.piercings || [])" :key="s">
+                    <span class="style-pill" x-text="s"></span>
+                  </template>
+                </div>
+
+                <div x-show="selected.experience" x-cloak class="mt-5">
+                  <p class="text-xs uppercase tracking-widest text-ink-500">Experience</p>
+                  <p class="mt-1 text-sm text-white"
+                     x-text="selected.experience + (String(selected.experience) === '1' ? ' year' : ' years')"></p>
+                </div>
+
+                <p x-show="selected.bio" class="mt-5 text-ink-100 leading-relaxed" x-text="selected.bio"></p>
+              </div>
+
+              <!-- Photo gallery -->
+              <div class="p-6 sm:p-8 border-b border-ink-800">
+                <p class="text-xs uppercase tracking-widest text-ink-500 mb-4">Portfolio</p>
+                <div x-show="selected.photos && selected.photos.length" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <template x-for="(photo, i) in selected.photos" :key="i">
+                    <div class="aspect-square overflow-hidden rounded-md bg-ink-800">
+                      <img :src="photo" :alt="selected.name + ' piercing work ' + (i+1)" loading="lazy"
+                           class="h-full w-full object-cover">
+                    </div>
+                  </template>
+                </div>
+                <div x-show="!selected.photos || !selected.photos.length"
+                     class="rounded-md border border-dashed border-ink-700 px-5 py-6 text-center">
+                  <p class="text-sm text-ink-200">No portfolio on Chairside yet.</p>
+                  <template x-if="selected.socials && selected.socials.instagram">
+                    <a :href="selected.socials.instagram" target="_blank" rel="noopener"
+                       class="mt-2 inline-block text-sm text-brass hover:text-white">See their work on Instagram &rarr;</a>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Shop + booking -->
+              <div class="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div x-show="selected.shop && selected.shop.name" x-cloak>
+                  <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Shop</p>
+                  <p class="text-white font-semibold" x-text="selected.shop.name"></p>
+                  <p class="text-sm text-ink-200 mt-1" x-text="selected.shop.address"></p>
+                  <a x-show="selected.shop.url" :href="selected.shop.url" target="_blank" rel="noopener"
+                     class="mt-3 inline-block text-sm text-brass hover:text-white">Visit shop &rarr;</a>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-widest text-ink-500 mb-2">Book with them</p>
+                  <div class="flex flex-col gap-2 items-start">
+                    <template x-if="selected.socials && selected.socials.instagram">
+                      <a :href="selected.socials.instagram" target="_blank" rel="noopener"
+                         class="text-white hover:text-brass">Instagram &rarr;</a>
+                    </template>
+                    <template x-if="selected.website">
+                      <a :href="selected.website" target="_blank" rel="noopener"
+                         class="text-white hover:text-brass">Website &rarr;</a>
+                    </template>
+                  </div>
+                  <p x-show="selected.booking" class="mt-3 text-sm text-ink-200">
+                    <span class="text-ink-500">Prefers</span> <span x-text="selected.booking"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
 
   </main>
 
@@ -168,6 +275,16 @@
       return {
         loading: true,
         piercers: [],
+        selected: null,
+
+        openPiercer(p) {
+          this.selected = p;
+          document.body.style.overflow = 'hidden';
+        },
+        closePiercer() {
+          this.selected = null;
+          document.body.style.overflow = '';
+        },
 
         async load() {
           try {
