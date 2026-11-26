@@ -305,11 +305,20 @@
                       class="signup-input signup-textarea"></textarea>
           </div>
 
+          <div x-show="restored && !error" x-cloak class="rounded-lg border border-ink-700 bg-ink-800/40 px-5 py-4">
+            <p class="text-sm text-white">We brought back what you typed last time.</p>
+            <p class="mt-1 text-xs text-ink-200">
+              Photos don't carry over, so add those again if you had any.
+              <button type="button" @click="clearDraft(); $el.closest('form').reset()"
+                      class="text-brass hover:text-white underline underline-offset-4">Start fresh</button>
+            </p>
+          </div>
+
           <div x-show="error" x-cloak class="rounded-lg border border-red-900 bg-red-950/40 px-5 py-4">
             <p class="text-sm font-medium text-white">That didn't send.</p>
             <p class="mt-1 text-xs text-red-200" x-text="error"></p>
             <p class="mt-2 text-xs text-ink-200">
-              <button type="button" @click="sendTheOldWay()" class="text-brass hover:text-white underline underline-offset-4">Try sending it again</button>,
+              <button type="button" @click="retry()" class="text-brass hover:text-white underline underline-offset-4">Try sending it again</button>,
               or <a :href="mailtoFallback" class="text-brass hover:text-white underline underline-offset-4">email it to us</a>
               and we'll add you by hand.
             </p>
@@ -338,7 +347,7 @@
         <p class="mt-5 font-display text-6xl sm:text-8xl text-white leading-[0.95]">You're in.</p>
         <p class="mt-6 text-lg text-ink-200 leading-relaxed max-w-lg mx-auto">
           We got it. Watch for a DM from <span class="text-white">@chairside</span> or an email from
-          <span class="text-white">hello@chairside.ink</span> within 48 hours.
+          <span class="text-white">chairsidetatts@gmail.com</span> within 48 hours.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
           <a href="/"
@@ -383,10 +392,90 @@
         plan: 'basic',
         email: '',
 
+        restored: false,
+        DRAFT_KEY: 'chairside:signup-draft',
+
         init() {
-          if (new URLSearchParams(location.search).get('plan') === 'featured') {
-            this.plan = 'featured';
+          const qs = new URLSearchParams(location.search);
+          if (qs.get('plan') === 'featured') this.plan = 'featured';
+
+          this.formEl = this.$el.querySelector('form');
+          if (!this.formEl) return;
+
+          // A submission that reached FormSubmit comes back on ?submitted=1,
+          // so that is the only signal that the draft is safe to throw away.
+          if (qs.get('submitted') === '1') this.clearDraft();
+          else this.restoreDraft();
+
+          let t;
+          this.formEl.addEventListener('input', () => {
+            clearTimeout(t);
+            t = setTimeout(() => this.saveDraft(), 400);
+          });
+        },
+
+        // Everything typed is mirrored to localStorage, so a bounce off a
+        // FormSubmit error page costs the artist nothing but a re-send.
+        draftFields() {
+          const out = {};
+          if (!this.formEl) return out;
+          for (const el of this.formEl.elements) {
+            if (!el.name || el.name.charAt(0) === '_') continue;
+            if (el.type === 'file' || el.type === 'submit') continue;
+            if (el.value) out[el.name] = el.value;
           }
+          return out;
+        },
+        saveDraft() {
+          try {
+            localStorage.setItem(this.DRAFT_KEY,
+              JSON.stringify({ saved: Date.now(), fields: this.draftFields() }));
+          } catch (e) { /* private window: carry on without a draft */ }
+        },
+        restoreDraft() {
+          try {
+            const raw = localStorage.getItem(this.DRAFT_KEY);
+            if (!raw) return;
+            const { saved, fields } = JSON.parse(raw);
+            if (!fields || Date.now() - saved > 14 * 24 * 60 * 60 * 1000) return this.clearDraft();
+            let n = 0;
+            for (const [k, v] of Object.entries(fields)) {
+              const el = this.formEl.elements[k];
+              if (el && v) { el.value = v; n++; }
+            }
+            if (!n) return;
+            this.restored = true;
+            if (fields.email) this.email = fields.email;     // these two are x-model bound,
+            if (fields.service) this.service = fields.service; // so Alpine needs them directly
+            if (fields.plan) this.plan = fields.plan;
+          } catch (e) { /* ignore a corrupt draft */ }
+        },
+        clearDraft() {
+          try { localStorage.removeItem(this.DRAFT_KEY); } catch (e) {}
+          this.restored = false;
+        },
+
+        // FormSubmit sits behind Cloudflare. When their origin is unhealthy
+        // Cloudflare serves a 525 page with no CORS headers, so this throws;
+        // a healthy endpoint answers 405 (POST only) and resolves. Checking
+        // first means a photo submission never navigates into that error page.
+        async formSubmitIsUp() {
+          const ctrl = new AbortController();
+          const timer = setTimeout(() => ctrl.abort(), 6000);
+          try {
+            await fetch('https://formsubmit.co/ajax/chairsidetatts@gmail.com', { signal: ctrl.signal });
+            return true;
+          } catch (e) {
+            return false;
+          } finally {
+            clearTimeout(timer);
+          }
+        },
+
+        get outageMessage() {
+          return 'FormSubmit, the service that delivers these, is not responding right now. '
+               + 'Nothing you typed is lost: it is saved on this page. Try again in a few minutes, '
+               + 'or email it over and we will add you by hand.';
         },
 
         error: '',
@@ -398,12 +487,35 @@
           if (this.formEl) { this.submitting = true; this.formEl.submit(); }
         },
 
+        // The retry link used to fire a blind native POST, which during an
+        // outage just walks the artist into the Cloudflare error page.
+        async retry() {
+          this.error = '';
+          if (!this.formEl) return;
+          if (!this.files.length) { this.formEl.requestSubmit(); return; }
+          this.submitting = true;
+          if (!(await this.formSubmitIsUp())) {
+            this.submitting = false;
+            this.error = this.outageMessage;
+            return;
+          }
+          this.sendTheOldWay();
+        },
+
         get isFeatured() { return this.plan === 'featured'; },
 
         get mailtoFallback() {
+          // Pre-fill with everything they typed, so the fallback is one tap
+          // and not a form to fill in a second time.
+          const f = this.draftFields();
+          const lines = Object.entries(f)
+            .filter(([k]) => k !== 'plan')
+            .map(([k, v]) => k.charAt(0).toUpperCase() + k.slice(1) + ': ' + v)
+            .join('\n');
           const body = 'My Chairside submission did not go through. Details:\n\n'
-            + 'Name: \nEmail: ' + (this.email || '') + '\nInstagram: \nShop: \nStyles: \n';
-          return 'mailto:hello@chairside.ink?subject=' + encodeURIComponent('Chairside signup (form failed)')
+            + (lines || 'Name: \nEmail: \nInstagram: \nShop: \nStyles: \n')
+            + (this.files.length ? '\n\nI had ' + this.files.length + ' photo(s) attached, sending them with this email.' : '');
+          return 'mailto:chairsidetatts@gmail.com?subject=' + encodeURIComponent('Chairside signup (form failed)')
             + '&body=' + encodeURIComponent(body);
         },
 
@@ -413,11 +525,22 @@
           if (this.oversize || this.processing || this.submitting) return;
           this.error = '';
           this.formEl = e.target;
+          this.saveDraft();
 
           // FormSubmit's /ajax endpoint accepts a multipart body, answers
           // success: true, and throws the files away. Photos only survive the
-          // native POST, so anyone who attached one goes that route instead.
-          if (this.files.length) { this.sendTheOldWay(); return; }
+          // native POST, so anyone who attached one goes that route instead,
+          // but only once we know there is something healthy to post into.
+          if (this.files.length) {
+            this.submitting = true;
+            if (!(await this.formSubmitIsUp())) {
+              this.submitting = false;
+              this.error = this.outageMessage;
+              return;
+            }
+            this.sendTheOldWay();
+            return;
+          }
 
           this.submitting = true;
           const fd = new FormData(e.target);
@@ -434,6 +557,7 @@
             if (!ok) {
               throw new Error((data && data.message) || ('The form service returned ' + res.status + '.'));
             }
+            this.clearDraft();
             if (this.isFeatured) { window.location.href = this.nextUrl; return; }
             document.documentElement.classList.add('is-submitted');
             window.scrollTo({ top: 0, behavior: 'smooth' });

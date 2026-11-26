@@ -104,7 +104,17 @@
     "experience": "5",
     "bio": "My name is Zane! Owner/ artist of Midnight Curiosity. I’m looking to do more black and grey work along with any American Traditional. I offer discounted designs I’m wanting to do! $100 minimum",
     "avatar": "/images/artists/zane-avatar.jpg",
-    "photos": [],
+    "photos": [
+      "/images/artists/zane-1.jpg",
+      "/images/artists/zane-2.jpg",
+      "/images/artists/zane-3.jpg",
+      "/images/artists/zane-4.jpg",
+      "/images/artists/zane-5.jpg",
+      "/images/artists/zane-6.jpg",
+      "/images/artists/zane-7.jpg",
+      "/images/artists/zane-8.jpg",
+      "/images/artists/zane-9.jpg"
+    ],
     "services": [
       "tattoo"
     ],
