@@ -24,7 +24,12 @@ const json = (body, status = 200) =>
 const slug = (s) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'artist';
 
-export default async function handler(request) {
+// Must be exported as a `fetch` object. A bare default-exported function is
+// read as the legacy (req, res) Node signature, and returning a Response from
+// that never writes to res, so the request hangs until the platform kills it.
+export default { fetch: handler };
+
+async function handler(request) {
   if (request.method !== 'POST') {
     return json({ error: 'Send this as a POST.' }, 405);
   }
