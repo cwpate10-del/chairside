@@ -1,7 +1,7 @@
 {
   "name": "chairside",
   "version": "0.1.0",
-  "description": "Chairside \u2014 find tattoo artists by city, style, and more.",
+  "description": "Chairside — find tattoo artists by city, style, and more.",
   "type": "module",
   "scripts": {
     "dev": "node scripts/generate-pages.mjs && vite",
@@ -24,5 +24,8 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.8",
     "tailwindcss": "^4.1.8"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.9.0"
   }
 }
