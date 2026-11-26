@@ -108,7 +108,13 @@ async function handler(request) {
     console.error('signup saved but notification failed', { id, error: notifyError });
   }
 
-  return json({ ok: true, id, photos: photos.length, notified, notifyError });
+  // TEMPORARY: names only, never values. Here to find out why the function
+  // cannot see RESEND_API_KEY. Remove once that is sorted.
+  const envSeen = notified
+    ? undefined
+    : Object.keys(process.env).filter((k) => /resend|blob/i.test(k)).sort();
+
+  return json({ ok: true, id, photos: photos.length, notified, notifyError, envSeen });
 }
 
 async function notify(record) {
