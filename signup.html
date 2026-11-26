@@ -90,23 +90,14 @@
         </div>
 
         <!-- Right: the form itself -->
-        <form action="https://formsubmit.co/chairsidetatts@gmail.com"
+        <!-- Posts to our own endpoint. The action is real, so if JavaScript
+             fails the browser still submits and the artist is still recorded. -->
+        <form action="/api/signup"
               method="POST"
               enctype="multipart/form-data"
               @submit.prevent="send($event)"
               class="space-y-10">
 
-          <input type="hidden" name="_subject" value="New Chairside artist submission" :value="isFeatured ? 'FEATURED signup — Chairside' : 'New Chairside artist submission'">
-          <!-- Receipt to the artist: if this never arrives, they know the
-               submission failed instead of both sides assuming it worked. -->
-          <input type="hidden" name="_autoresponse" value="Thanks for sending your details to Chairside. Your page is next on my list and I'll come back to you within 48 hours, usually sooner. If you don't hear anything by then, just reply to this email and I'll sort it out. Charlie, Chairside">
-          <input type="hidden" name="_captcha" value="false">
-          <!-- Backup inbox: if one account ever filters a submission, the other should still have it. -->
-          <input type="hidden" name="_cc" value="cwpate10@gmail.com">
-          <input type="hidden" name="_template" value="table">
-          <!-- Featured goes straight on to Stripe once we have their details,
-               so an abandoned checkout still leaves us a lead. -->
-          <input type="hidden" name="_next" value="https://chairside.ink/signup.html?submitted=1" :value="nextUrl">
           <input type="text" name="_honey" style="display:none">
 
           <div>
@@ -455,52 +446,8 @@
           this.restored = false;
         },
 
-        // FormSubmit sits behind Cloudflare. When their origin is unhealthy
-        // Cloudflare serves a 525 page with no CORS headers, so this throws;
-        // a healthy endpoint answers 405 (POST only) and resolves. Checking
-        // first means a photo submission never navigates into that error page.
-        async formSubmitIsUp() {
-          const ctrl = new AbortController();
-          const timer = setTimeout(() => ctrl.abort(), 6000);
-          try {
-            await fetch('https://formsubmit.co/ajax/chairsidetatts@gmail.com', { signal: ctrl.signal });
-            return true;
-          } catch (e) {
-            return false;
-          } finally {
-            clearTimeout(timer);
-          }
-        },
-
-        get outageMessage() {
-          return 'FormSubmit, the service that delivers these, is not responding right now. '
-               + 'Nothing you typed is lost: it is saved on this page. Try again in a few minutes, '
-               + 'or email it over and we will add you by hand.';
-        },
-
         error: '',
         formEl: null,
-
-        // form.submit() does not fire a submit event, so this bypasses the
-        // fetch handler entirely and does the classic POST that has always worked.
-        sendTheOldWay() {
-          if (this.formEl) { this.submitting = true; this.formEl.submit(); }
-        },
-
-        // The retry link used to fire a blind native POST, which during an
-        // outage just walks the artist into the Cloudflare error page.
-        async retry() {
-          this.error = '';
-          if (!this.formEl) return;
-          if (!this.files.length) { this.formEl.requestSubmit(); return; }
-          this.submitting = true;
-          if (!(await this.formSubmitIsUp())) {
-            this.submitting = false;
-            this.error = this.outageMessage;
-            return;
-          }
-          this.sendTheOldWay();
-        },
 
         get isFeatured() { return this.plan === 'featured'; },
 
@@ -519,50 +466,40 @@
             + '&body=' + encodeURIComponent(body);
         },
 
-        // Posting through fetch keeps the artist on chairside.ink, so a failure
-        // shows up here instead of dumping them on a FormSubmit error page.
+        retry() {
+          this.error = '';
+          if (this.formEl) this.formEl.requestSubmit();
+        },
+
+        // One path for everyone now. Posting to our own origin means photos
+        // travel over fetch like any other field, so there is no second code
+        // path to keep working and nothing to bounce the artist off site.
         async send(e) {
           if (this.oversize || this.processing || this.submitting) return;
           this.error = '';
           this.formEl = e.target;
           this.saveDraft();
-
-          // FormSubmit's /ajax endpoint accepts a multipart body, answers
-          // success: true, and throws the files away. Photos only survive the
-          // native POST, so anyone who attached one goes that route instead,
-          // but only once we know there is something healthy to post into.
-          if (this.files.length) {
-            this.submitting = true;
-            if (!(await this.formSubmitIsUp())) {
-              this.submitting = false;
-              this.error = this.outageMessage;
-              return;
-            }
-            this.sendTheOldWay();
-            return;
-          }
-
           this.submitting = true;
-          const fd = new FormData(e.target);
-          fd.delete('_next');            // no redirect when posting over fetch
+
           try {
-            const res = await fetch('https://formsubmit.co/ajax/chairsidetatts@gmail.com', {
+            const res = await fetch('/api/signup', {
               method: 'POST',
-              body: fd,
+              body: new FormData(e.target),
               headers: { 'Accept': 'application/json' }
             });
             let data = null;
             try { data = await res.json(); } catch (err) { data = null; }
-            const ok = res.ok && data && String(data.success) === 'true';
-            if (!ok) {
-              throw new Error((data && data.message) || ('The form service returned ' + res.status + '.'));
+            if (!res.ok || !data || data.ok !== true) {
+              throw new Error((data && data.error) || ('The server returned ' + res.status + '.'));
             }
+            // Recorded. A notification that failed to send is our problem, not
+            // theirs, so it does not change what they are told here.
             this.clearDraft();
             if (this.isFeatured) { window.location.href = this.nextUrl; return; }
             document.documentElement.classList.add('is-submitted');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           } catch (err) {
-            this.error = (err && err.message) || 'We could not reach the form service.';
+            this.error = (err && err.message) || 'We could not reach the server.';
           } finally {
             this.submitting = false;
           }

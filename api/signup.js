@@ -108,6 +108,15 @@ async function handler(request) {
     console.error('signup saved but notification failed', { id, error: notifyError });
   }
 
+  // A native form post (JavaScript disabled or broken) asks for HTML, not
+  // JSON. Send those to the confirmation page rather than a wall of braces.
+  if ((request.headers.get('accept') || '').includes('text/html')) {
+    return new Response(null, {
+      status: 303,
+      headers: { Location: '/signup.html?submitted=1', 'Cache-Control': 'no-store' },
+    });
+  }
+
   return json({ ok: true, id, photos: photos.length, notified, notifyError });
 }
 
