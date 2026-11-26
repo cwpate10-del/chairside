@@ -29,6 +29,7 @@ export default defineConfig({
         aftercare: resolve(__dirname, 'aftercare.html'),
         welcome: resolve(__dirname, 'welcome.html'),
         piercings: resolve(__dirname, 'piercings.html'),
+        admin: resolve(__dirname, 'admin.html'),
         ...generatedPages(resolve(__dirname, 'chattanooga')),
       },
     },

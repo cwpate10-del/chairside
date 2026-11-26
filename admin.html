@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chairside — Submissions</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/main.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="min-h-full bg-ink-950 text-ink-100 antialiased font-sans">
+
+<div x-data="admin()" x-init="load()" class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-5xl">
+
+  <header class="flex items-baseline justify-between gap-4 flex-wrap border-b border-ink-800 pb-5">
+    <div class="flex items-baseline gap-3">
+      <span class="font-display text-3xl text-white">Chairside</span>
+      <span class="text-xs uppercase tracking-widest text-ink-500">Submissions</span>
+    </div>
+    <div class="flex items-center gap-4 text-sm">
+      <span x-show="!loading && !error" x-cloak class="text-ink-500">
+        <span x-text="counts.new"></span> new ·
+        <span x-text="counts.added"></span> added ·
+        <span x-text="counts.skipped"></span> skipped
+      </span>
+      <button @click="load()" :disabled="loading"
+              class="text-brass hover:text-white disabled:opacity-40">Refresh</button>
+    </div>
+  </header>
+
+  <p x-show="loading" x-cloak class="mt-10 text-ink-500">Loading…</p>
+
+  <!-- No key, or a wrong one -->
+  <div x-show="error" x-cloak class="mt-10 rounded-xl border border-ink-800 bg-ink-900 p-6 max-w-md">
+    <p class="font-display text-3xl text-white">Locked</p>
+    <p class="mt-2 text-sm text-ink-200" x-text="error"></p>
+    <form @submit.prevent="saveKey()" class="mt-5 flex gap-2">
+      <input type="password" x-model="keyInput" placeholder="Admin key"
+             class="signup-input flex-1" autocomplete="current-password">
+      <button type="submit" class="rounded-md bg-brass hover:bg-brass-dark px-4 text-sm font-semibold uppercase tracking-widest text-brass-ink transition">
+        Open
+      </button>
+    </form>
+  </div>
+
+  <p x-show="!loading && !error && !submissions.length" x-cloak class="mt-12 text-ink-500">
+    Nothing yet. When an artist submits the form it shows up here.
+  </p>
+
+  <!-- Filter -->
+  <div x-show="!loading && !error && submissions.length" x-cloak class="mt-8 flex gap-2">
+    <template x-for="f in ['all', 'new', 'added', 'skipped']" :key="f">
+      <button @click="filter = f"
+              :class="filter === f ? 'bg-brass text-brass-ink' : 'bg-ink-800 text-ink-200 hover:bg-ink-700'"
+              class="rounded-full px-4 py-1.5 text-xs uppercase tracking-widest font-semibold transition"
+              x-text="f"></button>
+    </template>
+  </div>
+
+  <!-- Submissions -->
+  <div class="mt-6 space-y-5">
+    <template x-for="s in visible" :key="s.id">
+      <article class="rounded-xl border border-ink-800 bg-ink-900 overflow-hidden"
+               :class="s.status === 'new' ? 'border-l-2 border-l-brass' : ''">
+        <div class="p-6">
+
+          <div class="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h2 class="font-display text-3xl text-white" x-text="s.name"></h2>
+              <p class="text-xs uppercase tracking-widest text-ink-500 mt-1">
+                <span x-text="s.service || 'tattoo'"></span> ·
+                <span x-text="s.city"></span>
+                <template x-if="s.shop"><span> · <span x-text="s.shop"></span></span></template>
+                <template x-if="s.plan === 'featured'">
+                  <span class="text-brass"> · FEATURED</span>
+                </template>
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-ink-500" x-text="when(s.received)"></p>
+              <div class="mt-2 flex gap-1 justify-end">
+                <template x-for="st in ['new', 'added', 'skipped']" :key="st">
+                  <button @click="setStatus(s, st)"
+                          :class="s.status === st ? 'bg-brass text-brass-ink' : 'bg-ink-800 text-ink-500 hover:text-white'"
+                          class="rounded px-2 py-1 text-[10px] uppercase tracking-widest font-semibold transition"
+                          x-text="st"></button>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="mt-5 grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+            <p><span class="text-ink-500">Email</span>
+              <a :href="'mailto:' + s.email" class="text-brass hover:text-white ml-2" x-text="s.email"></a></p>
+            <p x-show="s.social"><span class="text-ink-500">Social</span>
+              <span class="ml-2 text-white" x-text="s.social"></span></p>
+            <p x-show="s.website"><span class="text-ink-500">Site</span>
+              <a :href="s.website" target="_blank" rel="noopener" class="text-brass hover:text-white ml-2 break-all" x-text="s.website"></a></p>
+            <p x-show="s.booking"><span class="text-ink-500">Books via</span>
+              <span class="ml-2 text-white" x-text="s.booking"></span></p>
+            <p x-show="s.experience"><span class="text-ink-500">Experience</span>
+              <span class="ml-2 text-white" x-text="s.experience + ' yrs'"></span></p>
+            <p x-show="s.gender"><span class="text-ink-500">Gender</span>
+              <span class="ml-2 text-white" x-text="s.gender"></span></p>
+          </div>
+
+          <p x-show="s.styles" class="mt-4 text-sm">
+            <span class="text-ink-500">Styles</span> <span class="text-white ml-2" x-text="s.styles"></span></p>
+          <p x-show="s.piercings" class="mt-1 text-sm">
+            <span class="text-ink-500">Piercings</span> <span class="text-white ml-2" x-text="s.piercings"></span></p>
+
+          <p x-show="s.bio" class="mt-4 text-sm text-ink-200 leading-relaxed" x-text="s.bio"></p>
+
+          <div x-show="s.notes" class="mt-4 rounded-md border border-ink-700 bg-ink-800/50 px-4 py-3">
+            <p class="text-[10px] uppercase tracking-widest text-ink-500">Notes for you</p>
+            <p class="mt-1 text-sm text-ink-200" x-text="s.notes"></p>
+          </div>
+
+          <!-- Photos -->
+          <div x-show="s.photos && s.photos.length" class="mt-5">
+            <p class="text-[10px] uppercase tracking-widest text-ink-500 mb-2">
+              <span x-text="s.photos.length"></span> photos
+            </p>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+              <template x-for="(p, i) in s.photos" :key="i">
+                <a :href="photoUrl(p.pathname)" target="_blank" rel="noopener"
+                   class="aspect-square overflow-hidden rounded-md bg-ink-800 border border-ink-800 hover:border-brass transition">
+                  <img :src="photoUrl(p.pathname)" :alt="s.name + ' ' + (i+1)" loading="lazy"
+                       class="h-full w-full object-cover">
+                </a>
+              </template>
+            </div>
+          </div>
+
+          <div class="mt-5 flex gap-4 text-xs">
+            <button @click="copyJson(s)" class="text-brass hover:text-white underline underline-offset-4">
+              Copy as artists.json record
+            </button>
+            <span x-show="copied === s.id" x-cloak class="text-ink-500">copied</span>
+          </div>
+
+        </div>
+      </article>
+    </template>
+  </div>
+
+  <p class="mt-12 text-xs text-ink-500 border-t border-ink-800 pt-5">
+    This page is only protected by the key in its URL. Treat the link like a password.
+  </p>
+</div>
+
+<script>
+  function admin() {
+    return {
+      loading: true,
+      error: '',
+      submissions: [],
+      filter: 'all',
+      keyInput: '',
+      copied: null,
+
+      get key() {
+        return new URLSearchParams(location.search).get('key')
+          || localStorage.getItem('chairside:adminkey') || '';
+      },
+      get visible() {
+        return this.filter === 'all'
+          ? this.submissions
+          : this.submissions.filter(s => (s.status || 'new') === this.filter);
+      },
+      get counts() {
+        const c = { new: 0, added: 0, skipped: 0 };
+        for (const s of this.submissions) c[s.status || 'new'] = (c[s.status || 'new'] || 0) + 1;
+        return c;
+      },
+
+      saveKey() {
+        if (!this.keyInput) return;
+        try { localStorage.setItem('chairside:adminkey', this.keyInput); } catch (e) {}
+        this.keyInput = '';
+        this.load();
+      },
+
+      photoUrl(pathname) {
+        return '/api/submissions?key=' + encodeURIComponent(this.key)
+             + '&photo=' + encodeURIComponent(pathname);
+      },
+
+      when(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
+        const mins = Math.round((Date.now() - d) / 60000);
+        if (mins < 60) return mins + 'm ago';
+        if (mins < 1440) return Math.round(mins / 60) + 'h ago';
+        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      },
+
+      async load() {
+        this.loading = true;
+        this.error = '';
+        if (!this.key) {
+          this.error = 'Add ?key=… to the URL, or paste the admin key below.';
+          this.loading = false;
+          return;
+        }
+        try {
+          const res = await fetch('/api/submissions?key=' + encodeURIComponent(this.key));
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || ('Server said ' + res.status));
+          this.submissions = data.submissions;
+        } catch (err) {
+          this.error = err.message;
+          this.submissions = [];
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      async setStatus(s, status) {
+        const was = s.status;
+        s.status = status;                        // optimistic, reverted below on failure
+        try {
+          const res = await fetch('/api/submissions?key=' + encodeURIComponent(this.key), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: s.id, status }),
+          });
+          if (!res.ok) throw new Error((await res.json()).error || res.status);
+        } catch (err) {
+          s.status = was;
+          this.error = 'Could not save that: ' + err.message;
+        }
+      },
+
+      // Shaped to match public/artists.json so a new artist is a paste, not retyping.
+      copyJson(s) {
+        const split = (v) => (v || '').split(/[,;]+/).map(x => x.trim()).filter(Boolean);
+        const record = {
+          id: s.id.replace(/-[a-z0-9]+-[a-f0-9]{8}$/, ''),
+          name: s.name,
+          city: (s.city || '').split(',')[0].trim(),
+          state: ((s.city || '').split(',')[1] || '').trim(),
+          org: s.shop || '',
+          styles: split(s.styles),
+          gender: s.gender || '',
+          featured: s.plan === 'featured',
+          availability: '',
+          pricing: '',
+          bio: s.bio || '',
+          avatar: '',
+          photos: [],
+          services: s.service === 'both' ? ['tattoo', 'piercing'] : [s.service || 'tattoo'],
+          piercings: split(s.piercings),
+          shop: { name: s.shop || '', address: '', url: '' },
+          socials: { instagram: '' },
+          website: s.website || '',
+          booking: s.booking || '',
+          experience: s.experience || '',
+        };
+        navigator.clipboard.writeText(JSON.stringify(record, null, 2));
+        this.copied = s.id;
+        setTimeout(() => { this.copied = null; }, 2000);
+      },
+    };
+  }
+</script>
+<style>[x-cloak] { display: none !important; }</style>
+</body>
+</html>
